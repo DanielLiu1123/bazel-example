@@ -1,35 +1,18 @@
 load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
+load("@contrib_rules_jvm//java:defs.bzl", "java_test_suite")
 
 java_library(
     name = "user_lib",
-    srcs = glob(["src/main/java/**/*.java"]),
-    resources = glob(["src/main/resources/**"]),
+    srcs = glob(["src/main/java/**/*.java"], allow_empty = True),
+    resources = glob(["src/main/resources/**"], allow_empty = True),
     # Must be workspace-root relative. Make resources land at classpath root.
     resource_strip_prefix = "services/user/src/main/resources",
     deps = [
-            # Spring Boot core and autoconfigure
-            "@maven//:org_springframework_boot_spring_boot",
-            "@maven//:org_springframework_boot_spring_boot_autoconfigure",
+        "@maven//:org_springframework_boot_spring_boot_starter_web",
+        "@maven//:org_springframework_boot_spring_boot_starter_data_jpa",
 
-            # Spring Web
-            "@maven//:org_springframework_spring_web",
-            "@maven//:org_springframework_spring_webmvc",
-            "@maven//:org_springframework_spring_context",
-            "@maven//:org_springframework_spring_beans",
-
-            # Spring Data JPA
-            "@maven//:org_springframework_data_spring_data_jpa",
-            "@maven//:org_springframework_data_spring_data_commons",
-
-            # JPA / Hibernate
-            "@maven//:jakarta_persistence_jakarta_persistence_api",
-            "@maven//:org_hibernate_orm_hibernate_core",
-
-            # Logging
-            "@maven//:org_slf4j_slf4j_api",
-
-            # Database
-            "@maven//:com_h2database_h2",
+        # Database
+        "@maven//:com_h2database_h2",
     ],
     visibility = ["//visibility:public"],
 )
@@ -37,32 +20,32 @@ java_library(
 java_binary(
     name = "user",
     main_class = "com.example.user.UserApplication",
-    runtime_deps = [":user_lib"],
+    runtime_deps = [
+        ":user_lib",
+    ],
     visibility = ["//visibility:public"],
 )
 
 java_library(
     name = "user_test_lib",
     srcs = glob(["src/test/java/**/*.java"], allow_empty = True),
+    resources = glob(["src/test/resources/**"], allow_empty = True),
+    resource_strip_prefix = "services/user/src/test/resources",
     deps = [
         ":user_lib",
+
         "@maven//:org_springframework_boot_spring_boot_starter_test",
-        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_junit_platform_junit_platform_reporting",
     ],
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
 )
 
-java_binary(
+java_test_suite(
     name = "user_test",
-    main_class = "org.junit.platform.console.ConsoleLauncher",
-    args = [
-        "--select-class=com.example.user.UserAppIT",
-        "--details=tree",
-        "--disable-banner",
-    ],
-    runtime_deps = [
+    srcs = glob(["src/test/java/**/*.java"]),
+    runner = "junit5",
+    test_suffixes = ["Test.java", "IT.java", "Tests.java"],
+    deps = [
         ":user_test_lib",
-        "@maven//:org_junit_jupiter_junit_jupiter_engine",
-        "@maven//:org_junit_platform_junit_platform_console",
     ],
 )

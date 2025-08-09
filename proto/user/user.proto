@@ -2,10 +2,8 @@ syntax = "proto3";
 
 package user;
 
-import "proto/common/types.proto";
-
 option java_package = "com.example.user";
-option java_outer_classname = "UserProto";
+option java_multiple_files = true;
 option go_package = "github.com/example/bazel-example/proto/user";
 
 // User entity
@@ -15,29 +13,5 @@ message User {
   string username = 3;
   string first_name = 4;
   string last_name = 5;
-  common.Address address = 6;
   string phone = 7;
-  common.Status status = 8;
-  common.Timestamp created_at = 9;
-  common.Timestamp updated_at = 10;
-}
-
-// User creation request
-message CreateUserRequest {
-  string email = 1;
-  string username = 2;
-  string password = 3;
-  string first_name = 4;
-  string last_name = 5;
-  common.Address address = 6;
-  string phone = 7;
-}
-
-// User update request
-message UpdateUserRequest {
-  string id = 1;
-  optional string first_name = 2;
-  optional string last_name = 3;
-  optional common.Address address = 4;
-  optional string phone = 5;
 }

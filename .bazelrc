@@ -24,7 +24,7 @@ build --show_timestamps
 build --incompatible_enable_cc_toolchain_resolution
 
 # Java specific options
-build --experimental_strict_java_deps=warn
+build --experimental_strict_java_deps=off
 
 # Proto options
 build --proto_compiler=@protobuf//:protoc
