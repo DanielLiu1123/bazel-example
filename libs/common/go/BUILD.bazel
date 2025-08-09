@@ -1,0 +1,12 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "common_go",
+    srcs = glob(["pkg/common/**/*.go"]),
+    importpath = "github.com/example/bazel-example/libs/common",
+    deps = [
+        "//proto/common:types_go_proto",
+        "//proto/common:errors_go_proto",
+    ],
+    visibility = ["//visibility:public"],
+)

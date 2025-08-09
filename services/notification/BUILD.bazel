@@ -1,0 +1,28 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "notification_lib",
+    srcs = glob(["internal/**/*.go"]),
+    importpath = "github.com/example/bazel-example/services/notification",
+    deps = [
+        "//proto/notification:notification_go_proto",
+        "//proto/notification:notification_service_go_proto",
+        "//proto/user:user_go_proto",
+        "//proto/common:types_go_proto",
+        "//proto/common:errors_go_proto",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "notification",
+    srcs = ["main.go"],
+    deps = [":notification_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "notification_test",
+    srcs = glob(["**/*_test.go"]),
+    deps = [":notification_lib"],
+)

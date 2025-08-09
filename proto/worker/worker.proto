@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package worker;
+
+import "proto/common/types.proto";
+
+option java_package = "com.example.worker";
+option java_outer_classname = "WorkerProto";
+option go_package = "github.com/example/bazel-example/proto/worker";
+
+// Job types
+enum JobType {
+  JOB_TYPE_UNSPECIFIED = 0;
+  JOB_TYPE_EMAIL_SEND = 1;
+  JOB_TYPE_DATA_EXPORT = 2;
+  JOB_TYPE_REPORT_GENERATION = 3;
+  JOB_TYPE_IMAGE_PROCESSING = 4;
+  JOB_TYPE_CLEANUP = 5;
+}
+
+// Job status
+enum JobStatus {
+  JOB_STATUS_UNSPECIFIED = 0;
+  JOB_STATUS_PENDING = 1;
+  JOB_STATUS_RUNNING = 2;
+  JOB_STATUS_COMPLETED = 3;
+  JOB_STATUS_FAILED = 4;
+  JOB_STATUS_CANCELLED = 5;
+}
+
+// Job priority
+enum JobPriority {
+  JOB_PRIORITY_UNSPECIFIED = 0;
+  JOB_PRIORITY_LOW = 1;
+  JOB_PRIORITY_NORMAL = 2;
+  JOB_PRIORITY_HIGH = 3;
+  JOB_PRIORITY_CRITICAL = 4;
+}
+
+// Job entity
+message Job {
+  string id = 1;
+  JobType type = 2;
+  JobStatus status = 3;
+  JobPriority priority = 4;
+  string payload = 5; // JSON payload
+  string result = 6; // JSON result
+  string error_message = 7;
+  int32 retry_count = 8;
+  int32 max_retries = 9;
+  common.Timestamp created_at = 10;
+  common.Timestamp started_at = 11;
+  common.Timestamp completed_at = 12;
+  common.Timestamp scheduled_at = 13; // For delayed jobs
+}
+
+// Create job request
+message CreateJobRequest {
+  JobType type = 1;
+  JobPriority priority = 2;
+  string payload = 3;
+  int32 max_retries = 4;
+  common.Timestamp scheduled_at = 5; // Optional: for delayed execution
+}

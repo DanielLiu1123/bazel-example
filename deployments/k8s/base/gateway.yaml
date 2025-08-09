@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+    component: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+        component: frontend
+    spec:
+      containers:
+      - name: gateway
+        image: bazel-example/gateway:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: USER_SERVICE_URL
+          value: "user-service:9001"
+        - name: ORDER_SERVICE_URL
+          value: "order-service:9002"
+        - name: NOTIFICATION_SERVICE_URL
+          value: "notification-service:9003"
+        - name: WORKER_SERVICE_URL
+          value: "worker-service:9004"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    app: gateway
+spec:
+  selector:
+    app: gateway
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer

@@ -1,0 +1,35 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_java//java:defs.bzl", "java_proto_library")
+
+proto_library(
+    name = "order_proto",
+    srcs = ["order.proto"],
+    deps = [
+        "//proto/common:types_proto",
+        "//proto/user:user_proto",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_proto_library(
+    name = "order_java_proto",
+    deps = [":order_proto"],
+    visibility = ["//visibility:public"],
+)
+
+proto_library(
+    name = "order_service_proto",
+    srcs = ["order_service.proto"],
+    deps = [
+        ":order_proto",
+        "//proto/common:errors_proto",
+        "//proto/common:pagination_proto",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_proto_library(
+    name = "order_service_java_proto",
+    deps = [":order_service_proto"],
+    visibility = ["//visibility:public"],
+)

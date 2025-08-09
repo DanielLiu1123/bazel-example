@@ -1,0 +1,30 @@
+# Build options
+build --java_language_version=21
+build --java_runtime_version=remotejdk_21
+build --tool_java_language_version=21
+build --tool_java_runtime_version=remotejdk_21
+
+# Test options
+test --test_output=errors
+test --test_summary=detailed
+
+# Performance options
+build --jobs=auto
+build --local_resources=memory=HOST_RAM*0.75
+build --local_resources=cpu=HOST_CPUS*0.75
+
+# Remote cache (uncomment if using remote cache)
+# build --remote_cache=grpc://your-cache-server:9092
+
+# Output options
+build --verbose_failures
+build --show_timestamps
+
+# Go specific options
+build --incompatible_enable_cc_toolchain_resolution
+
+# Java specific options
+build --experimental_strict_java_deps=warn
+
+# Proto options
+build --proto_compiler=@protobuf//:protoc

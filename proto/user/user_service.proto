@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package user;
+
+import "proto/user/user.proto";
+import "proto/common/errors.proto";
+import "proto/common/pagination.proto";
+
+option java_package = "com.example.user";
+option java_outer_classname = "UserServiceProto";
+option go_package = "github.com/example/bazel-example/proto/user";
+
+// User service definition
+service UserService {
+  // Create a new user
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  
+  // Get user by ID
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  
+  // Update user information
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+  
+  // Delete user
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+  
+  // List users with pagination
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  
+  // Authenticate user
+  rpc AuthenticateUser(AuthenticateUserRequest) returns (AuthenticateUserResponse);
+}
+
+// Request/Response messages
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+  common.Error error = 2;
+}
+
+message CreateUserResponse {
+  User user = 1;
+  common.Error error = 2;
+}
+
+message UpdateUserResponse {
+  User user = 1;
+  common.Error error = 2;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+  common.Error error = 2;
+}
+
+message ListUsersRequest {
+  common.PageRequest page_request = 1;
+  string filter = 2; // Optional filter criteria
+}
+
+message ListUsersResponse {
+  repeated User users = 1;
+  common.PageResponse page_response = 2;
+  common.Error error = 3;
+}
+
+message AuthenticateUserRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthenticateUserResponse {
+  User user = 1;
+  string token = 2; // JWT token
+  common.Error error = 3;
+}

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package internal;
+
+import "proto/common/types.proto";
+import "proto/user/user.proto";
+import "proto/order/order.proto";
+
+option java_package = "com.example.internal";
+option java_outer_classname = "EventsProto";
+option go_package = "github.com/example/bazel-example/proto/internal";
+
+// Event types
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_USER_CREATED = 1;
+  EVENT_TYPE_USER_UPDATED = 2;
+  EVENT_TYPE_USER_DELETED = 3;
+  EVENT_TYPE_ORDER_CREATED = 4;
+  EVENT_TYPE_ORDER_UPDATED = 5;
+  EVENT_TYPE_ORDER_CANCELLED = 6;
+  EVENT_TYPE_PAYMENT_PROCESSED = 7;
+  EVENT_TYPE_NOTIFICATION_SENT = 8;
+}
+
+// Base event message
+message Event {
+  string id = 1;
+  EventType type = 2;
+  string source_service = 3;
+  string correlation_id = 4;
+  common.Timestamp timestamp = 5;
+  oneof payload {
+    UserEvent user_event = 10;
+    OrderEvent order_event = 11;
+    PaymentEvent payment_event = 12;
+    NotificationEvent notification_event = 13;
+  }
+}
+
+// User-related events
+message UserEvent {
+  string user_id = 1;
+  user.User user_data = 2;
+  string action = 3; // created, updated, deleted
+}
+
+// Order-related events
+message OrderEvent {
+  string order_id = 1;
+  string user_id = 2;
+  order.Order order_data = 3;
+  string action = 4; // created, updated, cancelled
+  order.OrderStatus previous_status = 5;
+  order.OrderStatus new_status = 6;
+}
+
+// Payment-related events
+message PaymentEvent {
+  string payment_id = 1;
+  string order_id = 2;
+  string user_id = 3;
+  common.Money amount = 4;
+  string payment_method = 5;
+  string status = 6; // success, failed, pending
+}
+
+// Notification-related events
+message NotificationEvent {
+  string notification_id = 1;
+  string user_id = 2;
+  string type = 3; // email, sms, push
+  string status = 4; // sent, failed, pending
+}

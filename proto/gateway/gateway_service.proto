@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package gateway;
+
+import "proto/gateway/gateway.proto";
+import "proto/user/user_service.proto";
+import "proto/order/order_service.proto";
+import "proto/common/errors.proto";
+
+option java_package = "com.example.gateway";
+option java_outer_classname = "GatewayServiceProto";
+option go_package = "github.com/example/bazel-example/proto/gateway";
+
+// Gateway service definition
+service GatewayService {
+  // Health check
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+  
+  // Authentication
+  rpc Login(LoginRequest) returns (LoginResponse);
+  
+  // User service proxy methods
+  rpc CreateUser(user.CreateUserRequest) returns (user.CreateUserResponse);
+  rpc GetUser(user.GetUserRequest) returns (user.GetUserResponse);
+  rpc UpdateUser(user.UpdateUserRequest) returns (user.UpdateUserResponse);
+  rpc DeleteUser(user.DeleteUserRequest) returns (user.DeleteUserResponse);
+  rpc ListUsers(user.ListUsersRequest) returns (user.ListUsersResponse);
+  
+  // Order service proxy methods
+  rpc CreateOrder(order.CreateOrderRequest) returns (order.CreateOrderResponse);
+  rpc GetOrder(order.GetOrderRequest) returns (order.GetOrderResponse);
+  rpc UpdateOrderStatus(order.UpdateOrderStatusRequest) returns (order.UpdateOrderStatusResponse);
+  rpc ListUserOrders(order.ListUserOrdersRequest) returns (order.ListUserOrdersResponse);
+}
