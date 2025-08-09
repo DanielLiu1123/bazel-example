@@ -10,6 +10,7 @@ bazel_dep(name = "rules_java", version = "8.15.1")
 bazel_dep(name = "rules_jvm_external", version = "6.8")
 bazel_dep(name = "contrib_rules_jvm", version = "0.29.0")
 bazel_dep(name = "protobuf", version = "31.1")
+bazel_dep(name = "grpc", version = "1.74.0")
 
 # Go dependencies
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")

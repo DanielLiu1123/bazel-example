@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package notification;
+
+import "user/user.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.example.notification";
+option java_multiple_files = true;
+option go_package = "github.com/example/bazel-example/proto/notification;notificationpb";
+
+// Supported delivery channels
+enum Channel {
+  CHANNEL_UNSPECIFIED = 0;
+  CHANNEL_EMAIL = 1;
+  CHANNEL_SMS = 2;
+  CHANNEL_PUSH = 3;
+  CHANNEL_IN_APP = 4;
+}
+
+// Notification priority
+enum Priority {
+  PRIORITY_UNSPECIFIED = 0;
+  PRIORITY_LOW = 1;
+  PRIORITY_NORMAL = 2;
+  PRIORITY_HIGH = 3;
+  PRIORITY_CRITICAL = 4;
+}
+
+// Business categories/types of notifications
+enum NotificationType {
+  NOTIFICATION_TYPE_UNSPECIFIED = 0;
+  NOTIFICATION_TYPE_SYSTEM = 1;         // system-wide announcements
+  NOTIFICATION_TYPE_SECURITY = 2;       // security-related (password reset, login alert)
+  NOTIFICATION_TYPE_PROMOTION = 3;      // marketing/promotions
+  NOTIFICATION_TYPE_TRANSACTIONAL = 4;  // order confirmations, receipts, etc.
+}
+
+// Lifecycle state of a notification
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_DRAFT = 1;
+  STATUS_SCHEDULED = 2;
+  STATUS_SENDING = 3;
+  STATUS_SENT = 4;
+  STATUS_CANCELLED = 5;
+  STATUS_FAILED = 6;
+}
+
+// Per-recipient delivery status
+enum DeliveryStatus {
+  DELIVERY_STATUS_UNSPECIFIED = 0;
+  DELIVERY_STATUS_PENDING = 1;
+  DELIVERY_STATUS_SENT = 2;
+  DELIVERY_STATUS_DELIVERED = 3;
+  DELIVERY_STATUS_READ = 4;
+  DELIVERY_STATUS_FAILED = 5;
+  DELIVERY_STATUS_UNSUBSCRIBED = 6;
+  DELIVERY_STATUS_BOUNCED = 7;
+}
+
+message KeyValue {
+  string key = 1;
+  string value = 2;
+}
+
+// Recipient for a notification
+message Recipient {
+  // References user.User.id. If empty, address must be provided.
+  string user_id = 1;
+  // Optional override of channel per recipient.
+  Channel channel = 2;
+  // Delivery address when user_id is not enough (email, phone, device token).
+  string address = 3;
+  DeliveryStatus status = 4;
+  string error_message = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// The Notification entity
+message Notification {
+  string id = 1;
+  NotificationType type = 2;
+  string title = 3;
+  string body = 4;
+  repeated KeyValue data = 5; // extra context payload (e.g., order_id)
+  Channel channel = 6;
+  Priority priority = 7;
+  // Optional sender info. Depends on user.proto type.
+  user.User sender = 8;
+  repeated Recipient recipients = 9;
+  Status status = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+  google.protobuf.Timestamp scheduled_at = 13;
+  google.protobuf.Timestamp sent_at = 14;
+}
+
+// User-level notification preferences
+message UserPreferences {
+  string user_id = 1;
+  repeated Channel enabled_channels = 2;
+  repeated NotificationType muted_types = 3;
+  bool do_not_disturb = 4;
+  QuietHours quiet_hours = 5;
+  string timezone = 6; // IANA TZ, e.g., "America/Los_Angeles"
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// Quiet hours window in local time (minutes since midnight)
+message QuietHours {
+  uint32 start_minute = 1; // inclusive, 0..1439
+  uint32 end_minute = 2;   // exclusive, 0..1440
+}
+

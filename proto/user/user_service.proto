@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package user;
 
-import "proto/user/user.proto";
-import "proto/common/errors.proto";
+import "user/user.proto";
+import "common/errors.proto";
 
 option java_package = "com.example.user";
-option java_outer_classname = "UserServiceProto";
-option go_package = "github.com/example/bazel-example/proto/user";
+option java_multiple_files = true;
+option go_package = "github.com/example/bazel-example/proto/user;userpb";
 
 // User service definition
 service UserService {
