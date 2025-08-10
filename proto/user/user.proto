@@ -6,12 +6,13 @@ option java_package = "com.example.user";
 option java_multiple_files = true;
 option go_package = "github.com/example/bazel-example/proto/user;userpb";
 
-// User entity
-message User {
+// User model
+message UserModel {
   string id = 1;
   string email = 2;
   string username = 3;
   string first_name = 4;
   string last_name = 5;
   string phone = 7;
+  repeated string hobbies = 8;
 }
