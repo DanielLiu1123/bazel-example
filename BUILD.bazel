@@ -22,17 +22,16 @@ java_library(
     visibility = ["//visibility:public"],
 )
 
+java_library(
+    name = "mapstruct_lib",
+    exports = ["@maven//:org_mapstruct_mapstruct"],
+    visibility = ["//visibility:public"],
+)
+
 java_plugin(
     name = "lombok_ap",
     processor_class = "lombok.launch.AnnotationProcessorHider$AnnotationProcessor",
     deps = ["@maven//:org_projectlombok_lombok", "@maven//:org_projectlombok_lombok_mapstruct_binding"],
-    visibility = ["//visibility:public"],
-)
-
-# Mapstruct annotation processor
-java_library(
-    name = "mapstruct_lib",
-    exports = ["@maven//:org_mapstruct_mapstruct"],
     visibility = ["//visibility:public"],
 )
 
