@@ -16,7 +16,7 @@ import static org.mapstruct.ReportingPolicy.IGNORE;
  * @since 2025/8/10
  */
 @Mapper(
-        nullValueCheckStrategy = ALWAYS,
+//        nullValueCheckStrategy = ALWAYS,
         collectionMappingStrategy = ADDER_PREFERRED,
         unmappedTargetPolicy = IGNORE)
 public abstract class UserConverter {
