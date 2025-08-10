@@ -28,6 +28,7 @@ springboot(
     boot_app_class = "com.example.user.UserApp",
     java_library = ":lib",
     boot_launcher_class = 'org.springframework.boot.loader.launch.JarLauncher',
+    include_git_properties_file = False,
 )
 
 java_test_suite(
