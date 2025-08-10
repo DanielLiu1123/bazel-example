@@ -2,51 +2,39 @@ load("@rules_java//java:defs.bzl", "java_binary", "java_library")
 load("@contrib_rules_jvm//java:defs.bzl", "java_test_suite")
 
 java_library(
-    name = "user_lib",
-    srcs = glob(["src/main/java/**/*.java"], allow_empty = True),
-    resources = glob(["src/main/resources/**"], allow_empty = True),
+    name = "lib",
+    srcs = glob(["src/main/java/**/*.java"]),
+    resources = glob(["src/main/resources/**"]),
     # Must be workspace-root relative. Make resources land at classpath root.
     resource_strip_prefix = "services/user/src/main/resources",
     deps = [
         "//proto/user:grpc_java",
-        "@maven//:org_springframework_boot_spring_boot_starter_web",
-        "@maven//:org_springframework_boot_spring_boot_starter_data_jpa",
 
-        # Database
-        "@maven//:com_h2database_h2",
+        "@maven//:org_springframework_boot_spring_boot_starter",
+        "@maven//:io_github_danielliu1123_grpc_boot_starter",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
 )
 
 java_binary(
-    name = "user",
+    name = "main",
     main_class = "com.example.user.UserApplication",
     runtime_deps = [
-        ":user_lib",
+        ":lib",
     ],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:private"],
 )
 
-java_library(
-    name = "user_test_lib",
-    srcs = glob(["src/test/java/**/*.java"], allow_empty = True),
-    resources = glob(["src/test/resources/**"], allow_empty = True),
-    resource_strip_prefix = "services/user/src/test/resources",
+java_test_suite(
+    name = "test",
+    srcs = glob(["src/test/java/**/*.java"]),
+    runner = "junit5",
+    test_suffixes = ["Test.java", "Tests.java", "IT.java"],
     deps = [
-        ":user_lib",
+        ":lib",
 
         "@maven//:org_springframework_boot_spring_boot_starter_test",
         "@maven//:org_junit_platform_junit_platform_reporting",
     ],
-    visibility = ["//visibility:public"],
-)
-
-java_test_suite(
-    name = "user_test",
-    srcs = glob(["src/test/java/**/*.java"]),
-    runner = "junit5",
-    test_suffixes = ["Test.java", "IT.java", "Tests.java"],
-    deps = [
-        ":user_test_lib",
-    ],
+    visibility = ["//visibility:private"],
 )

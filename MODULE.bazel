@@ -10,10 +10,11 @@ bazel_dep(name = "rules_java", version = "8.15.1")
 bazel_dep(name = "rules_jvm_external", version = "6.8")
 bazel_dep(name = "contrib_rules_jvm", version = "0.29.0")
 bazel_dep(name = "protobuf", version = "31.1")
-bazel_dep(name = "grpc", version = "1.74.1")
 
-bazel_dep(name = "rules_proto_grpc_java", version = "5.5.0")
-bazel_dep(name = "rules_proto_grpc_go", version = "5.5.0")
+bazel_dep(name = "grpc-java", version = "1.71.0")
+
+# bazel_dep(name = "rules_proto_grpc_java", version = "5.5.0")
+# bazel_dep(name = "rules_proto_grpc_go", version = "5.5.0")
 
 # Go dependencies
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
@@ -38,9 +39,9 @@ maven.install(
         "org.springframework.boot:spring-boot-starter-test",
 
         # gRPC artifacts (版本由 BOM 管理)
-        "io.grpc:grpc-netty-shaded",
-        "io.grpc:grpc-protobuf",
-        "io.grpc:grpc-stub",
+        "io.github.danielliu1123:grpc-boot-starter",
+        "io.github.danielliu1123:grpc-client-boot-starter",
+        "io.github.danielliu1123:grpc-server-boot-starter",
 
         # Protobuf (版本由 BOM 管理)
         "com.google.protobuf:protobuf-java",

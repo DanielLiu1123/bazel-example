@@ -1,8 +1,7 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
 load("@protobuf//bazel:java_proto_library.bzl", "java_proto_library")
-load("@rules_go//proto:def.bzl", "go_proto_library")
-load("@rules_proto_grpc_java//:defs.bzl", "java_grpc_library")
-load("@rules_proto_grpc_go//:defs.bzl", "go_grpc_library")
+load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
+load("@rules_go//proto:def.bzl", "go_proto_library", "go_grpc_library")
 
 proto_library(
     name = "proto",
@@ -18,25 +17,24 @@ java_proto_library(
     visibility = ["//visibility:public"],
 )
 
-go_proto_library(
-    name = "proto_go",
-    protos = [":proto"],
-    deps = ["//proto/common:proto_go"],
-    importpath = "github.com/example/bazel-example/proto/user",
+java_grpc_library(
+    name = "grpc_java",
+    srcs = [":proto"],
+    deps = [":proto_java"],
     visibility = ["//visibility:public"],
 )
 
-java_grpc_library(
-    name = "grpc_java",
+go_proto_library(
+    name = "proto_go",
     protos = [":proto"],
-    deps = ["//proto/common:proto_java"],
+    importpath = "github.com/example/bazel-example/proto/user",
     visibility = ["//visibility:public"],
 )
 
 go_grpc_library(
     name = "grpc_go",
     protos = [":proto"],
-    deps = ["//proto/common:proto_go"],
-    importpath = "github.com/example/bazel-example/proto/notification",
+    deps = [":proto_go"],
+    importpath = "github.com/example/bazel-example/proto/user",
     visibility = ["//visibility:public"],
 )
