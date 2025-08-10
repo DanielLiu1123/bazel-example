@@ -87,7 +87,7 @@ message Notification {
   Channel channel = 6;
   Priority priority = 7;
   // Optional sender info. Depends on user.proto type.
-  user.User sender = 8;
+  user.UserModel sender = 8;
   repeated Recipient recipients = 9;
   Status status = 10;
   google.protobuf.Timestamp created_at = 11;

@@ -15,10 +15,10 @@ import java.util.List;
  * - User data retrieval
  */
 @SpringBootApplication
-public class UserApplication {
+public class UserApp {
     
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(UserApp.class, args);
 
         var user = UserModel.newBuilder()
                 .setId("1")

@@ -22,7 +22,7 @@ java_library(
 
 java_binary(
     name = "main",
-    main_class = "com.example.user.UserApplication",
+    main_class = "com.example.user.UserApp",
     runtime_deps = [
         ":lib",
     ],
