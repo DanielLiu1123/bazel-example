@@ -4,6 +4,7 @@ import com.example.user.GetUserRequest;
 import com.example.user.GetUserResponse;
 import com.example.user.UserServiceGrpc;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Component;
  * TODO: Enable when proto files are properly generated
  */
 @Component
+@Slf4j
 public class UserGrpcService extends UserServiceGrpc.UserServiceImplBase {
 
     @Override
     public void getUser(GetUserRequest request, StreamObserver<GetUserResponse> responseObserver) {
+        log.info("Getting user: {}", request.getId());
         super.getUser(request, responseObserver);
     }
 }

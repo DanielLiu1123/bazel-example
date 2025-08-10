@@ -1,4 +1,4 @@
-load("@rules_java//java:defs.bzl", "java_binary", "java_library")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_plugin")
 load("@contrib_rules_jvm//java:defs.bzl", "java_test_suite")
 
 java_library(
@@ -7,11 +7,15 @@ java_library(
     resources = glob(["src/main/resources/**"]),
     # Must be workspace-root relative. Make resources land at classpath root.
     resource_strip_prefix = "services/user/src/main/resources",
+    plugins = ["//:lombok_ap", "//:mapstruct_ap", "//:mapstruct_spi_protobuf_ap"],
     deps = [
         "//proto/user:grpc_java",
 
         "@maven//:org_springframework_boot_spring_boot_starter",
         "@maven//:io_github_danielliu1123_grpc_boot_starter",
+
+        "//:lombok_lib",
+        "//:mapstruct_lib",
     ],
     visibility = ["//visibility:private"],
 )

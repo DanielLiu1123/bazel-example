@@ -1,4 +1,5 @@
 load("@gazelle//:def.bzl", "gazelle")
+load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
 
 # gazelle:prefix github.com/example/bazel-example
 gazelle(name = "gazelle")
@@ -11,4 +12,41 @@ gazelle(
         "-prune",
     ],
     command = "update-repos",
+)
+
+# Lombok annotation processor and compile-only wrapper
+java_library(
+    name = "lombok_lib",
+    exports = ["@maven//:org_projectlombok_lombok"],
+    neverlink = True,
+    visibility = ["//visibility:public"],
+)
+
+java_plugin(
+    name = "lombok_ap",
+    processor_class = "lombok.launch.AnnotationProcessorHider$AnnotationProcessor",
+    deps = ["@maven//:org_projectlombok_lombok", "@maven//:org_projectlombok_lombok_mapstruct_binding"],
+    visibility = ["//visibility:public"],
+)
+
+# Mapstruct annotation processor
+java_library(
+    name = "mapstruct_lib",
+    exports = ["@maven//:org_mapstruct_mapstruct"],
+    visibility = ["//visibility:public"],
+)
+
+java_plugin(
+    name = "mapstruct_ap",
+    processor_class = "org.mapstruct.ap.MappingProcessor",
+    deps = ["@maven//:org_mapstruct_mapstruct_processor"],
+    visibility = ["//visibility:public"],
+)
+
+# Mapstruct protobuf SPI implementation
+java_plugin(
+    name = "mapstruct_spi_protobuf_ap",
+    processor_class = "no.entur.mapstruct.spi.protobuf.ProcessingEnvOptionsHolder",
+    deps = ["@maven//:no_entur_mapstruct_spi_protobuf_spi_impl"],
+    visibility = ["//visibility:public"],
 )

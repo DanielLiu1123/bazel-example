@@ -51,6 +51,16 @@ maven.install(
         "org.junit.platform:junit-platform-console",
         "org.junit.platform:junit-platform-launcher",
         "org.junit.platform:junit-platform-engine",
+
+        # Annotation processors
+        "org.projectlombok:lombok",
+        # https://github.com/mapstruct/mapstruct
+        "org.mapstruct:mapstruct:1.6.3",
+        "org.mapstruct:mapstruct-processor:1.6.3",
+        # https://mapstruct.org/faq/#Can-I-use-MapStruct-together-with-Project-Lombok
+        "org.projectlombok:lombok-mapstruct-binding:0.2.0",
+        # https://github.com/entur/mapstruct-spi-protobuf
+        "no.entur.mapstruct.spi:protobuf-spi-impl:1.50.0",
     ],
 )
 use_repo(maven, "maven")
