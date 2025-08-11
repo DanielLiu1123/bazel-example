@@ -31,24 +31,28 @@ maven.install(
             "com.google.protobuf:protobuf-bom:4.31.1",
         ],
     artifacts = [
-        # Spring Boot artifacts (版本由 BOM 管理)
+        # Spring Boot artifacts
         "org.springframework.boot:spring-boot-starter-web",
         "org.springframework.boot:spring-boot-loader",
+        "org.springframework.boot:spring-boot-jarmode-tools",
+        "org.springframework.boot:spring-boot-loader-tools",
         "org.springframework.boot:spring-boot-starter-test",
 
-        # gRPC artifacts (版本由 BOM 管理)
         "io.github.danielliu1123:grpc-boot-starter",
         "io.github.danielliu1123:grpc-client-boot-starter",
         "io.github.danielliu1123:grpc-server-boot-starter",
 
-        # Protobuf (版本由 BOM 管理)
         "com.google.protobuf:protobuf-java",
+        "com.google.protobuf:protobuf-java-util",
+        "io.grpc:grpc-netty",
+        "io.grpc:grpc-netty-shaded",
+        "io.grpc:grpc-protobuf",
+        "io.grpc:grpc-stub",
+        "io.grpc:grpc-services",
 
-        "com.h2database:h2",
         "org.junit.jupiter:junit-jupiter-api",
-        "org.junit.platform:junit-platform-console",
         "org.junit.platform:junit-platform-launcher",
-        "org.junit.platform:junit-platform-engine",
+        "org.junit.platform:junit-platform-reporting",
 
         # Annotation processors
         "org.projectlombok:lombok",
