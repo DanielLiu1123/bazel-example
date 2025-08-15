@@ -1,0 +1,236 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service BillingService {
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse);
+  rpc ProcessPayment(ProcessPaymentRequest) returns (ProcessPaymentResponse);
+  rpc GetBillingHistory(GetBillingHistoryRequest) returns (stream BillingEvent);
+  rpc UpdatePaymentMethod(UpdatePaymentMethodRequest) returns (UpdatePaymentMethodResponse);
+  rpc GenerateReport(GenerateReportRequest) returns (BillingReport);
+}
+
+enum PaymentStatus {
+  PAYMENT_STATUS_UNSPECIFIED = 0;
+  PAYMENT_STATUS_PENDING = 1;
+  PAYMENT_STATUS_PROCESSING = 2;
+  PAYMENT_STATUS_COMPLETED = 3;
+  PAYMENT_STATUS_FAILED = 4;
+  PAYMENT_STATUS_REFUNDED = 5;
+  PAYMENT_STATUS_CANCELLED = 6;
+}
+
+enum CurrencyType {
+  CURRENCY_TYPE_UNSPECIFIED = 0;
+  CURRENCY_TYPE_USD = 1;
+  CURRENCY_TYPE_EUR = 2;
+  CURRENCY_TYPE_GBP = 3;
+  CURRENCY_TYPE_JPY = 4;
+  CURRENCY_TYPE_CNY = 5;
+}
+
+message MoneyAmount {
+  int64 amount_cents = 1;
+  CurrencyType currency = 2;
+  string currency_code = 3;
+  
+  message ExchangeRate {
+    CurrencyType from_currency = 1;
+    CurrencyType to_currency = 2;
+    double rate = 3;
+    google.protobuf.Timestamp rate_timestamp = 4;
+  }
+  
+  ExchangeRate exchange_rate = 4;
+}
+
+message PaymentMethod {
+  string payment_method_id = 1;
+  string type = 2;
+  
+  message CreditCard {
+    string card_number_masked = 1;
+    string cardholder_name = 2;
+    int32 expiry_month = 3;
+    int32 expiry_year = 4;
+    string brand = 5;
+    string last_four_digits = 6;
+  }
+  
+  message BankAccount {
+    string account_number_masked = 1;
+    string routing_number = 2;
+    string bank_name = 3;
+    string account_type = 4;
+  }
+  
+  message DigitalWallet {
+    string wallet_type = 1;
+    string wallet_id = 2;
+    bool is_verified = 3;
+  }
+  
+  oneof payment_details {
+    CreditCard credit_card = 3;
+    BankAccount bank_account = 4;
+    DigitalWallet digital_wallet = 5;
+  }
+  
+  bool is_default = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message Invoice {
+  string invoice_id = 1;
+  string customer_id = 2;
+  string invoice_number = 3;
+  
+  message LineItem {
+    string item_id = 1;
+    string description = 2;
+    int32 quantity = 3;
+    MoneyAmount unit_price = 4;
+    MoneyAmount total_price = 5;
+    repeated string tags = 6;
+    
+    message Discount {
+      string discount_id = 1;
+      string discount_type = 2;
+      double percentage = 3;
+      MoneyAmount fixed_amount = 4;
+    }
+    
+    repeated Discount discounts = 7;
+  }
+  
+  repeated LineItem line_items = 4;
+  MoneyAmount subtotal = 5;
+  MoneyAmount tax_amount = 6;
+  MoneyAmount total_amount = 7;
+  
+  google.protobuf.Timestamp issue_date = 8;
+  google.protobuf.Timestamp due_date = 9;
+  PaymentStatus status = 10;
+  
+  message BillingAddress {
+    string company_name = 1;
+    string street_address = 2;
+    string city = 3;
+    string state = 4;
+    string postal_code = 5;
+    string country = 6;
+    string tax_id = 7;
+  }
+  
+  BillingAddress billing_address = 11;
+  map<string, string> metadata = 12;
+}
+
+message Payment {
+  string payment_id = 1;
+  string invoice_id = 2;
+  MoneyAmount amount = 3;
+  PaymentStatus status = 4;
+  PaymentMethod payment_method = 5;
+  
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp processed_at = 7;
+  
+  message PaymentProcessor {
+    string processor_name = 1;
+    string transaction_id = 2;
+    string authorization_code = 3;
+    map<string, string> processor_data = 4;
+  }
+  
+  PaymentProcessor processor_info = 8;
+  string failure_reason = 9;
+  int32 retry_count = 10;
+}
+
+message CreateInvoiceRequest {
+  Invoice invoice = 1;
+  bool send_email = 2;
+  google.protobuf.Duration payment_terms = 3;
+}
+
+message CreateInvoiceResponse {
+  Invoice invoice = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+}
+
+message ProcessPaymentRequest {
+  string invoice_id = 1;
+  string payment_method_id = 2;
+  MoneyAmount amount = 3;
+  map<string, string> payment_metadata = 4;
+}
+
+message ProcessPaymentResponse {
+  Payment payment = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message GetBillingHistoryRequest {
+  string customer_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  repeated PaymentStatus status_filter = 4;
+}
+
+message BillingEvent {
+  string event_id = 1;
+  string event_type = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  
+  oneof event_data {
+    Invoice invoice_created = 4;
+    Payment payment_processed = 5;
+    Payment payment_failed = 6;
+  }
+}
+
+message UpdatePaymentMethodRequest {
+  string customer_id = 1;
+  PaymentMethod payment_method = 2;
+  bool set_as_default = 3;
+}
+
+message UpdatePaymentMethodResponse {
+  PaymentMethod payment_method = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message GenerateReportRequest {
+  string customer_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  string report_type = 4;
+}
+
+message BillingReport {
+  string report_id = 1;
+  string report_type = 2;
+  google.protobuf.Timestamp generated_at = 3;
+  
+  message Summary {
+    MoneyAmount total_revenue = 1;
+    int32 total_invoices = 2;
+    int32 paid_invoices = 3;
+    int32 pending_invoices = 4;
+    MoneyAmount outstanding_amount = 5;
+  }
+  
+  Summary summary = 4;
+  repeated Invoice invoices = 5;
+  repeated Payment payments = 6;
+}

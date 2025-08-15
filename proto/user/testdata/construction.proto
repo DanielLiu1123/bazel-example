@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service ConstructionService {
+  rpc CreateProject(CreateProjectRequest) returns (CreateProjectResponse);
+  rpc UpdateProjectStatus(UpdateProjectStatusRequest) returns (UpdateProjectStatusResponse);
+  rpc AssignWorkerToTask(AssignWorkerToTaskRequest) returns (AssignWorkerToTaskResponse);
+  rpc GetProjectDetails(GetProjectDetailsRequest) returns (Project);
+}
+
+message Project {
+  string project_id = 1;
+  string project_name = 2;
+  string location = 3;
+  google.protobuf.Timestamp start_date = 4;
+  google.protobuf.Timestamp end_date = 5;
+  string status = 6;
+  repeated Task tasks = 7;
+}
+
+message Task {
+  string task_id = 1;
+  string task_name = 2;
+  string description = 3;
+  string status = 4;
+  repeated Worker assigned_workers = 5;
+}
+
+message Worker {
+  string worker_id = 1;
+  string name = 2;
+  string role = 3;
+}
+
+message CreateProjectRequest {
+  Project project = 1;
+}
+
+message CreateProjectResponse {
+  Project project = 1;
+  string error_message = 2;
+}
+
+message UpdateProjectStatusRequest {
+  string project_id = 1;
+  string status = 2;
+}
+
+message UpdateProjectStatusResponse {
+  Project project = 1;
+  string error_message = 2;
+}
+
+message AssignWorkerToTaskRequest {
+  string task_id = 1;
+  string worker_id = 2;
+}
+
+message AssignWorkerToTaskResponse {
+  Task task = 1;
+  string error_message = 2;
+}
+
+message GetProjectDetailsRequest {
+  string project_id = 1;
+}

@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service RetailPosService {
+  rpc ProcessSale(ProcessSaleRequest) returns (ProcessSaleResponse);
+  rpc GetTransactionHistory(GetTransactionHistoryRequest) returns (stream Transaction);
+  rpc GetProductInfo(GetProductInfoRequest) returns (Product);
+}
+
+message Product {
+  string product_id = 1;
+  string name = 2;
+  double price = 3;
+  int32 stock_quantity = 4;
+}
+
+message SaleItem {
+  string product_id = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
+
+message Transaction {
+  string transaction_id = 1;
+  repeated SaleItem items = 2;
+  double total_price = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message ProcessSaleRequest {
+  repeated SaleItem items = 1;
+}
+
+message ProcessSaleResponse {
+  Transaction transaction = 1;
+  string error_message = 2;
+}
+
+message GetTransactionHistoryRequest {
+  google.protobuf.Timestamp start_time = 1;
+  google.protobuf.Timestamp end_time = 2;
+}
+
+message GetProductInfoRequest {
+  string product_id = 1;
+}

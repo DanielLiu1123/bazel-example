@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service PetCareService {
+  rpc RegisterPet(RegisterPetRequest) returns (RegisterPetResponse);
+  rpc ScheduleAppointment(ScheduleAppointmentRequest) returns (ScheduleAppointmentResponse);
+  rpc GetPetRecords(GetPetRecordsRequest) returns (stream PetRecord);
+}
+
+message Pet {
+  string pet_id = 1;
+  string name = 2;
+  string species = 3;
+  string breed = 4;
+  int32 age = 5;
+  string owner_id = 6;
+}
+
+message Appointment {
+  string appointment_id = 1;
+  string pet_id = 2;
+  string vet_id = 3;
+  google.protobuf.Timestamp time = 4;
+  string reason = 5;
+}
+
+message PetRecord {
+  string record_id = 1;
+  string pet_id = 2;
+  string notes = 3;
+  google.protobuf.Timestamp date = 4;
+}
+
+message RegisterPetRequest {
+  Pet pet = 1;
+}
+
+message RegisterPetResponse {
+  Pet pet = 1;
+  string error_message = 2;
+}
+
+message ScheduleAppointmentRequest {
+  Appointment appointment = 1;
+}
+
+message ScheduleAppointmentResponse {
+  Appointment appointment = 1;
+  string error_message = 2;
+}
+
+message GetPetRecordsRequest {
+  string pet_id = 1;
+}

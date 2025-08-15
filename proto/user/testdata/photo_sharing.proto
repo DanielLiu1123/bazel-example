@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service PhotoSharingService {
+  rpc UploadPhoto(stream UploadPhotoRequest) returns (UploadPhotoResponse);
+  rpc GetPhoto(GetPhotoRequest) returns (Photo);
+  rpc CreateAlbum(CreateAlbumRequest) returns (CreateAlbumResponse);
+}
+
+message Photo {
+  string photo_id = 1;
+  string user_id = 2;
+  string album_id = 3;
+  string url = 4;
+  string caption = 5;
+  google.protobuf.Timestamp uploaded_at = 6;
+}
+
+message Album {
+  string album_id = 1;
+  string user_id = 2;
+  string title = 3;
+  string description = 4;
+}
+
+message UploadPhotoRequest {
+  oneof data {
+    Photo metadata = 1;
+    bytes chunk = 2;
+  }
+}
+
+message UploadPhotoResponse {
+  Photo photo = 1;
+  string error_message = 2;
+}
+
+message GetPhotoRequest {
+  string photo_id = 1;
+}
+
+message CreateAlbumRequest {
+  Album album = 1;
+}
+
+message CreateAlbumResponse {
+  Album album = 1;
+  string error_message = 2;
+}

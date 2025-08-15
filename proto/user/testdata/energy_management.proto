@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service EnergyManagementService {
+  rpc GetEnergyUsage(GetEnergyUsageRequest) returns (EnergyUsageResponse);
+  rpc SetThermostat(SetThermostatRequest) returns (SetThermostatResponse);
+  rpc GetSolarProduction(GetSolarProductionRequest) returns (SolarProductionResponse);
+}
+
+message EnergyUsage {
+  double kwh = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message ThermostatSetting {
+  double temperature_celsius = 1;
+  string mode = 2;
+}
+
+message SolarProduction {
+  double kwh = 1;
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+message GetEnergyUsageRequest {
+  string meter_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}
+
+message EnergyUsageResponse {
+  repeated EnergyUsage usage_data = 1;
+}
+
+message SetThermostatRequest {
+  string thermostat_id = 1;
+  ThermostatSetting setting = 2;
+}
+
+message SetThermostatResponse {
+  ThermostatSetting setting = 1;
+  string error_message = 2;
+}
+
+message GetSolarProductionRequest {
+  string panel_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}
+
+message SolarProductionResponse {
+  repeated SolarProduction production_data = 1;
+}

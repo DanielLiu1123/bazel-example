@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service FitnessEquipmentService {
+  rpc StartWorkout(StartWorkoutRequest) returns (StartWorkoutResponse);
+  rpc EndWorkout(EndWorkoutRequest) returns (EndWorkoutResponse);
+  rpc GetWorkoutData(GetWorkoutDataRequest) returns (stream WorkoutData);
+}
+
+message Equipment {
+  string equipment_id = 1;
+  string type = 2;
+  string status = 3;
+}
+
+message Workout {
+  string workout_id = 1;
+  string user_id = 2;
+  string equipment_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  double calories_burned = 6;
+  double distance_km = 7;
+}
+
+message WorkoutData {
+  string workout_id = 1;
+  double speed_kph = 2;
+  double heart_rate = 3;
+  double resistance_level = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+message StartWorkoutRequest {
+  string user_id = 1;
+  string equipment_id = 2;
+}
+
+message StartWorkoutResponse {
+  string workout_id = 1;
+  string error_message = 2;
+}
+
+message EndWorkoutRequest {
+  string workout_id = 1;
+}
+
+message EndWorkoutResponse {
+  Workout workout = 1;
+  string error_message = 2;
+}
+
+message GetWorkoutDataRequest {
+  string workout_id = 1;
+}

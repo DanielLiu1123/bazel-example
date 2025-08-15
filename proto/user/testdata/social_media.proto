@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service SocialMediaService {
+  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+  rpc GetFeed(GetFeedRequest) returns (stream Post);
+  rpc FollowUser(FollowUserRequest) returns (FollowUserResponse);
+}
+
+message Post {
+  string post_id = 1;
+  string user_id = 2;
+  string content = 3;
+  google.protobuf.Timestamp created_at = 4;
+  int32 likes = 5;
+}
+
+message UserProfile {
+  string user_id = 1;
+  string username = 2;
+  string display_name = 3;
+  string bio = 4;
+  int32 follower_count = 5;
+  int32 following_count = 6;
+}
+
+message CreatePostRequest {
+  string user_id = 1;
+  string content = 2;
+}
+
+message CreatePostResponse {
+  Post post = 1;
+  string error_message = 2;
+}
+
+message GetFeedRequest {
+  string user_id = 1;
+}
+
+message FollowUserRequest {
+  string follower_id = 1;
+  string followee_id = 2;
+}
+
+message FollowUserResponse {
+  bool success = 1;
+  string error_message = 2;
+}

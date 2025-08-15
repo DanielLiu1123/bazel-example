@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service VirtualRealityService {
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse);
+  rpc JoinSession(JoinSessionRequest) returns (stream SessionEvent);
+  rpc LeaveSession(LeaveSessionRequest) returns (LeaveSessionResponse);
+}
+
+message Session {
+  string session_id = 1;
+  string world_id = 2;
+  repeated string participants = 3;
+}
+
+message Avatar {
+  string avatar_id = 1;
+  string user_id = 2;
+  string appearance = 3;
+}
+
+message SessionEvent {
+  oneof event {
+    UserJoined user_joined = 1;
+    UserLeft user_left = 2;
+    ObjectMoved object_moved = 3;
+  }
+}
+
+message UserJoined {
+  string user_id = 1;
+  Avatar avatar = 2;
+}
+
+message UserLeft {
+  string user_id = 1;
+}
+
+message ObjectMoved {
+  string object_id = 1;
+  double x = 2;
+  double y = 3;
+  double z = 4;
+}
+
+message CreateSessionRequest {
+  string world_id = 1;
+}
+
+message CreateSessionResponse {
+  Session session = 1;
+  string error_message = 2;
+}
+
+message JoinSessionRequest {
+  string session_id = 1;
+  string user_id = 2;
+}
+
+message LeaveSessionRequest {
+  string session_id = 1;
+  string user_id = 2;
+}
+
+message LeaveSessionResponse {
+  bool success = 1;
+  string error_message = 2;
+}

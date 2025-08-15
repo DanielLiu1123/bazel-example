@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service MessagingPlatformService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc GetMessages(GetMessagesRequest) returns (stream Message);
+  rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse);
+  rpc JoinChannel(JoinChannelRequest) returns (JoinChannelResponse);
+}
+
+message Message {
+  string message_id = 1;
+  string channel_id = 2;
+  string sender_id = 3;
+  string content = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string to_user_id = 6;
+}
+
+message Channel {
+  string channel_id = 1;
+  string name = 2;
+  repeated string members = 3;
+}
+
+message SendMessageRequest {
+  Message message = 1;
+}
+
+message SendMessageResponse {
+  Message message = 1;
+  string error_message = 2;
+}
+
+message GetMessagesRequest {
+  string channel_id = 1;
+}
+
+message CreateChannelRequest {
+  string name = 1;
+  repeated string members = 2;
+}
+
+message CreateChannelResponse {
+  Channel channel = 1;
+  string error_message = 2;
+}
+
+message JoinChannelRequest {
+  string channel_id = 1;
+  string user_id = 2;
+}
+
+message JoinChannelResponse {
+  Channel channel = 1;
+  string error_message = 2;
+}

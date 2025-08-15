@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service SpaceExplorationService {
+  rpc LaunchRocket(LaunchRocketRequest) returns (LaunchRocketResponse);
+  rpc TrackCelestialObject(TrackCelestialObjectRequest) returns (stream CelestialObjectPosition);
+  rpc GetMissionStatus(GetMissionStatusRequest) returns (MissionStatus);
+}
+
+message Rocket {
+  string rocket_id = 1;
+  string name = 2;
+  string model = 3;
+  string status = 4;
+}
+
+message Mission {
+  string mission_id = 1;
+  string name = 2;
+  string destination = 3;
+  google.protobuf.Timestamp launch_date = 4;
+}
+
+message CelestialObject {
+  string object_id = 1;
+  string name = 2;
+  string type = 3;
+}
+
+message CelestialObjectPosition {
+  string object_id = 1;
+  double x = 2;
+  double y = 3;
+  double z = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+message MissionStatus {
+  string mission_id = 1;
+  string status = 2;
+  string current_location = 3;
+}
+
+message LaunchRocketRequest {
+  Rocket rocket = 1;
+  Mission mission = 2;
+}
+
+message LaunchRocketResponse {
+  string mission_id = 1;
+  string error_message = 2;
+}
+
+message TrackCelestialObjectRequest {
+  string object_id = 1;
+}
+
+message GetMissionStatusRequest {
+  string mission_id = 1;
+}

@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service WasteManagementService {
+  rpc SchedulePickup(SchedulePickupRequest) returns (SchedulePickupResponse);
+  rpc GetPickupStatus(GetPickupStatusRequest) returns (PickupStatus);
+  rpc GetWasteReport(GetWasteReportRequest) returns (WasteReport);
+}
+
+message PickupRequest {
+  string user_id = 1;
+  string address = 2;
+  string waste_type = 3;
+  google.protobuf.Timestamp requested_time = 4;
+}
+
+message PickupStatus {
+  string pickup_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp estimated_time = 3;
+}
+
+message WasteReport {
+  string user_id = 1;
+  double total_waste_kg = 2;
+  double recycled_kg = 3;
+  double landfill_kg = 4;
+  google.protobuf.Timestamp report_date = 5;
+}
+
+message SchedulePickupRequest {
+  PickupRequest request = 1;
+}
+
+message SchedulePickupResponse {
+  string pickup_id = 1;
+  string error_message = 2;
+}
+
+message GetPickupStatusRequest {
+  string pickup_id = 1;
+}
+
+message GetWasteReportRequest {
+  string user_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+}

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service TravelBookingService {
+  rpc SearchFlights(SearchFlightsRequest) returns (SearchFlightsResponse);
+  rpc BookFlight(BookFlightRequest) returns (BookFlightResponse);
+  rpc GetBookingStatus(GetBookingStatusRequest) returns (Booking);
+}
+
+message Flight {
+  string flight_id = 1;
+  string airline = 2;
+  string origin = 3;
+  string destination = 4;
+  google.protobuf.Timestamp departure_time = 5;
+  google.protobuf.Timestamp arrival_time = 6;
+  double price = 7;
+}
+
+message Booking {
+  string booking_id = 1;
+  string flight_id = 2;
+  string user_id = 3;
+  string status = 4;
+}
+
+message SearchFlightsRequest {
+  string origin = 1;
+  string destination = 2;
+  google.protobuf.Timestamp date = 3;
+}
+
+message SearchFlightsResponse {
+  repeated Flight flights = 1;
+}
+
+message BookFlightRequest {
+  string flight_id = 1;
+  string user_id = 2;
+}
+
+message BookFlightResponse {
+  Booking booking = 1;
+  string error_message = 2;
+}
+
+message GetBookingStatusRequest {
+  string booking_id = 1;
+}

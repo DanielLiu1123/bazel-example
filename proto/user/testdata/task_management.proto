@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service TaskManagementService {
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+  rpc UpdateTaskStatus(UpdateTaskStatusRequest) returns (UpdateTaskStatusResponse);
+  rpc GetTasks(GetTasksRequest) returns (stream Task);
+}
+
+message Task {
+  string task_id = 1;
+  string title = 2;
+  string description = 3;
+  string status = 4;
+  string assignee_id = 5;
+  google.protobuf.Timestamp due_date = 6;
+}
+
+message CreateTaskRequest {
+  Task task = 1;
+}
+
+message CreateTaskResponse {
+  Task task = 1;
+  string error_message = 2;
+}
+
+message UpdateTaskStatusRequest {
+  string task_id = 1;
+  string status = 2;
+}
+
+message UpdateTaskStatusResponse {
+  Task task = 1;
+  string error_message = 2;
+}
+
+message GetTasksRequest {
+  string user_id = 1;
+}

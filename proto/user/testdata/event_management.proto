@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service EventManagementService {
+  rpc CreateEvent(CreateEventRequest) returns (CreateEventResponse);
+  rpc RsvpToEvent(RsvpToEventRequest) returns (RsvpToEventResponse);
+  rpc GetEventDetails(GetEventDetailsRequest) returns (Event);
+  rpc GetAttendees(GetAttendeesRequest) returns (stream Attendee);
+}
+
+message Event {
+  string event_id = 1;
+  string name = 2;
+  string description = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  string location = 6;
+  repeated Attendee attendees = 7;
+}
+
+message Attendee {
+  string user_id = 1;
+  string name = 2;
+  string rsvp_status = 3;
+}
+
+message CreateEventRequest {
+  Event event = 1;
+}
+
+message CreateEventResponse {
+  Event event = 1;
+  string error_message = 2;
+}
+
+message RsvpToEventRequest {
+  string event_id = 1;
+  string user_id = 2;
+  string rsvp_status = 3;
+}
+
+message RsvpToEventResponse {
+  Attendee attendee = 1;
+  string error_message = 2;
+}
+
+message GetEventDetailsRequest {
+  string event_id = 1;
+}
+
+message GetAttendeesRequest {
+  string event_id = 1;
+}

@@ -1,0 +1,193 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+// Account management service
+service AccountManagementService {
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse);
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
+  rpc GetAccountHistory(GetAccountHistoryRequest) returns (stream AccountHistoryEvent);
+  rpc BulkUpdateAccounts(stream BulkUpdateRequest) returns (BulkUpdateResponse);
+}
+
+// Account status enumeration
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_STATUS_ACTIVE = 1;
+  ACCOUNT_STATUS_SUSPENDED = 2;
+  ACCOUNT_STATUS_PENDING_VERIFICATION = 3;
+  ACCOUNT_STATUS_CLOSED = 4;
+  ACCOUNT_STATUS_FROZEN = 5;
+}
+
+// Account type enumeration
+enum AccountType {
+  ACCOUNT_TYPE_UNSPECIFIED = 0;
+  ACCOUNT_TYPE_PERSONAL = 1;
+  ACCOUNT_TYPE_BUSINESS = 2;
+  ACCOUNT_TYPE_PREMIUM = 3;
+  ACCOUNT_TYPE_ENTERPRISE = 4;
+}
+
+// Nested address structure
+message Address {
+  string street_address = 1;
+  string city = 2;
+  string state_province = 3;
+  string postal_code = 4;
+  string country_code = 5;
+  
+  message Coordinates {
+    double latitude = 1;
+    double longitude = 2;
+    double altitude = 3;
+  }
+  
+  Coordinates coordinates = 6;
+  bool is_primary = 7;
+  repeated string address_tags = 8;
+}
+
+// Contact information
+message ContactInfo {
+  string email = 1;
+  string phone_number = 2;
+  string mobile_number = 3;
+  string fax_number = 4;
+  
+  message SocialMedia {
+    string platform = 1;
+    string username = 2;
+    string profile_url = 3;
+    bool is_verified = 4;
+  }
+  
+  repeated SocialMedia social_media_accounts = 5;
+  repeated string emergency_contacts = 6;
+}
+
+// Account preferences
+message AccountPreferences {
+  string language_code = 1;
+  string timezone = 2;
+  string currency_code = 3;
+  bool email_notifications = 4;
+  bool sms_notifications = 5;
+  bool push_notifications = 6;
+  
+  message NotificationSettings {
+    bool marketing_emails = 1;
+    bool security_alerts = 2;
+    bool account_updates = 3;
+    bool billing_notifications = 4;
+    google.protobuf.Duration notification_frequency = 5;
+  }
+  
+  NotificationSettings notification_settings = 7;
+  map<string, string> custom_preferences = 8;
+}
+
+// Main account message
+message Account {
+  string account_id = 1;
+  string username = 2;
+  string display_name = 3;
+  AccountStatus status = 4;
+  AccountType type = 5;
+  
+  ContactInfo contact_info = 6;
+  repeated Address addresses = 7;
+  AccountPreferences preferences = 8;
+  
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+  google.protobuf.Timestamp last_login_at = 11;
+  
+  message SecurityInfo {
+    bool two_factor_enabled = 1;
+    repeated string trusted_devices = 2;
+    int32 failed_login_attempts = 3;
+    google.protobuf.Timestamp last_password_change = 4;
+    repeated string security_questions = 5;
+  }
+  
+  SecurityInfo security_info = 12;
+  map<string, string> metadata = 13;
+  repeated string tags = 14;
+  double balance = 15;
+  string currency = 16;
+}
+
+// Request messages
+message CreateAccountRequest {
+  Account account = 1;
+  string password = 2;
+  bool send_welcome_email = 3;
+  string referral_code = 4;
+}
+
+message CreateAccountResponse {
+  Account account = 1;
+  string activation_token = 2;
+  bool success = 3;
+  repeated string validation_errors = 4;
+}
+
+message UpdateAccountRequest {
+  string account_id = 1;
+  Account account = 2;
+  repeated string update_mask = 3;
+  bool validate_only = 4;
+}
+
+message UpdateAccountResponse {
+  Account account = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+}
+
+message DeleteAccountRequest {
+  string account_id = 1;
+  string reason = 2;
+  bool hard_delete = 3;
+}
+
+message DeleteAccountResponse {
+  bool success = 1;
+  string deletion_id = 2;
+  google.protobuf.Timestamp scheduled_deletion_date = 3;
+}
+
+message GetAccountHistoryRequest {
+  string account_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+  repeated string event_types = 4;
+}
+
+message AccountHistoryEvent {
+  string event_id = 1;
+  string event_type = 2;
+  string description = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  map<string, string> event_data = 5;
+}
+
+message BulkUpdateRequest {
+  repeated string account_ids = 1;
+  Account account_template = 2;
+  repeated string update_mask = 3;
+}
+
+message BulkUpdateResponse {
+  int32 updated_count = 1;
+  int32 failed_count = 2;
+  repeated string error_messages = 3;
+}

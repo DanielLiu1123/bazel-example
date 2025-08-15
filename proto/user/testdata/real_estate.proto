@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service RealEstateService {
+  rpc ListProperty(ListPropertyRequest) returns (ListPropertyResponse);
+  rpc SearchProperties(SearchPropertiesRequest) returns (SearchPropertiesResponse);
+  rpc ScheduleViewing(ScheduleViewingRequest) returns (ScheduleViewingResponse);
+}
+
+message Property {
+  string property_id = 1;
+  string address = 2;
+  double price = 3;
+  int32 bedrooms = 4;
+  int32 bathrooms = 5;
+  double area_sqft = 6;
+  string type = 7;
+}
+
+message ViewingAppointment {
+  string appointment_id = 1;
+  string property_id = 2;
+  string user_id = 3;
+  google.protobuf.Timestamp time = 4;
+}
+
+message ListPropertyRequest {
+  Property property = 1;
+}
+
+message ListPropertyResponse {
+  Property property = 1;
+  string error_message = 2;
+}
+
+message SearchPropertiesRequest {
+  string location = 1;
+  double min_price = 2;
+  double max_price = 3;
+  int32 min_bedrooms = 4;
+}
+
+message SearchPropertiesResponse {
+  repeated Property properties = 1;
+}
+
+message ScheduleViewingRequest {
+  string property_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp time = 3;
+}
+
+message ScheduleViewingResponse {
+  ViewingAppointment appointment = 1;
+  string error_message = 2;
+}

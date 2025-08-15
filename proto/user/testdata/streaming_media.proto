@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service StreamingMediaService {
+  rpc StreamVideo(StreamVideoRequest) returns (stream VideoChunk);
+  rpc GetVideoMetadata(GetVideoMetadataRequest) returns (VideoMetadata);
+  rpc GetUserWatchHistory(GetUserWatchHistoryRequest) returns (stream Video);
+}
+
+message Video {
+  string video_id = 1;
+  string title = 2;
+  string description = 3;
+  int32 duration_seconds = 4;
+}
+
+message VideoMetadata {
+  Video video = 1;
+  string quality = 2;
+  repeated string available_qualities = 3;
+}
+
+message VideoChunk {
+  bytes data = 1;
+}
+
+message StreamVideoRequest {
+  string video_id = 1;
+  string quality = 2;
+}
+
+message GetVideoMetadataRequest {
+  string video_id = 1;
+}
+
+message GetUserWatchHistoryRequest {
+  string user_id = 1;
+}

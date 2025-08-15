@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service RecipePlatformService {
+  rpc AddRecipe(AddRecipeRequest) returns (AddRecipeResponse);
+  rpc GetRecipe(GetRecipeRequest) returns (Recipe);
+  rpc SearchRecipes(SearchRecipesRequest) returns (stream Recipe);
+}
+
+message Recipe {
+  string recipe_id = 1;
+  string title = 2;
+  string description = 3;
+  repeated string ingredients = 4;
+  repeated string instructions = 5;
+  string author_id = 6;
+}
+
+message AddRecipeRequest {
+  Recipe recipe = 1;
+}
+
+message AddRecipeResponse {
+  Recipe recipe = 1;
+  string error_message = 2;
+}
+
+message GetRecipeRequest {
+  string recipe_id = 1;
+}
+
+message SearchRecipesRequest {
+  string query = 1;
+}

@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service ParkingService {
+  rpc FindParking(FindParkingRequest) returns (FindParkingResponse);
+  rpc ReserveParking(ReserveParkingRequest) returns (ReserveParkingResponse);
+  rpc GetReservationStatus(GetReservationStatusRequest) returns (Reservation);
+}
+
+message ParkingSpot {
+  string spot_id = 1;
+  string location = 2;
+  bool is_available = 3;
+  double price_per_hour = 4;
+}
+
+message Reservation {
+  string reservation_id = 1;
+  string spot_id = 2;
+  string user_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  string status = 6;
+}
+
+message FindParkingRequest {
+  string location = 1;
+}
+
+message FindParkingResponse {
+  repeated ParkingSpot spots = 1;
+}
+
+message ReserveParkingRequest {
+  string spot_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+}
+
+message ReserveParkingResponse {
+  Reservation reservation = 1;
+  string error_message = 2;
+}
+
+message GetReservationStatusRequest {
+  string reservation_id = 1;
+}

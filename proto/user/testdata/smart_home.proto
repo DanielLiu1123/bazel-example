@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service SmartHomeService {
+  rpc SetDeviceStatus(SetDeviceStatusRequest) returns (SetDeviceStatusResponse);
+  rpc GetDeviceStatus(GetDeviceStatusRequest) returns (Device);
+  rpc CreateScene(CreateSceneRequest) returns (CreateSceneResponse);
+}
+
+message Device {
+  string device_id = 1;
+  string name = 2;
+  string type = 3;
+  bool is_on = 4;
+  double value = 5;
+}
+
+message Scene {
+  string scene_id = 1;
+  string name = 2;
+  repeated DeviceAction actions = 3;
+}
+
+message DeviceAction {
+  string device_id = 1;
+  bool is_on = 2;
+  double value = 3;
+}
+
+message SetDeviceStatusRequest {
+  string device_id = 1;
+  bool is_on = 2;
+  double value = 3;
+}
+
+message SetDeviceStatusResponse {
+  Device device = 1;
+  string error_message = 2;
+}
+
+message GetDeviceStatusRequest {
+  string device_id = 1;
+}
+
+message CreateSceneRequest {
+  Scene scene = 1;
+}
+
+message CreateSceneResponse {
+  Scene scene = 1;
+  string error_message = 2;
+}

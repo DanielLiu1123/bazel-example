@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service LogisticsService {
+  rpc CreateShipment(CreateShipmentRequest) returns (CreateShipmentResponse);
+  rpc TrackShipment(TrackShipmentRequest) returns (stream ShipmentStatus);
+  rpc UpdateShipmentLocation(UpdateShipmentLocationRequest) returns (UpdateShipmentLocationResponse);
+}
+
+message Shipment {
+  string shipment_id = 1;
+  string origin = 2;
+  string destination = 3;
+  string status = 4;
+  google.protobuf.Timestamp estimated_delivery = 5;
+}
+
+message ShipmentStatus {
+  string shipment_id = 1;
+  string status = 2;
+  string location = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message CreateShipmentRequest {
+  Shipment shipment = 1;
+}
+
+message CreateShipmentResponse {
+  Shipment shipment = 1;
+  string error_message = 2;
+}
+
+message TrackShipmentRequest {
+  string shipment_id = 1;
+}
+
+message UpdateShipmentLocationRequest {
+  string shipment_id = 1;
+  string location = 2;
+}
+
+message UpdateShipmentLocationResponse {
+  Shipment shipment = 1;
+  string error_message = 2;
+}

@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service HotelManagementService {
+  rpc SearchHotels(SearchHotelsRequest) returns (SearchHotelsResponse);
+  rpc BookRoom(BookRoomRequest) returns (BookRoomResponse);
+  rpc GetBookingDetails(GetBookingDetailsRequest) returns (Booking);
+}
+
+message Hotel {
+  string hotel_id = 1;
+  string name = 2;
+  string address = 3;
+  double rating = 4;
+  repeated Room rooms = 5;
+}
+
+message Room {
+  string room_id = 1;
+  string type = 2;
+  double price_per_night = 3;
+  bool is_available = 4;
+}
+
+message Booking {
+  string booking_id = 1;
+  string user_id = 2;
+  string hotel_id = 3;
+  string room_id = 4;
+  google.protobuf.Timestamp check_in_date = 5;
+  google.protobuf.Timestamp check_out_date = 6;
+  string status = 7;
+}
+
+message SearchHotelsRequest {
+  string location = 1;
+  google.protobuf.Timestamp check_in_date = 2;
+  google.protobuf.Timestamp check_out_date = 3;
+}
+
+message SearchHotelsResponse {
+  repeated Hotel hotels = 1;
+}
+
+message BookRoomRequest {
+  string user_id = 1;
+  string hotel_id = 2;
+  string room_id = 3;
+  google.protobuf.Timestamp check_in_date = 4;
+  google.protobuf.Timestamp check_out_date = 5;
+}
+
+message BookRoomResponse {
+  Booking booking = 1;
+  string error_message = 2;
+}
+
+message GetBookingDetailsRequest {
+  string booking_id = 1;
+}

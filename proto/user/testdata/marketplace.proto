@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service MarketplaceService {
+  rpc ListProduct(ListProductRequest) returns (ListProductResponse);
+  rpc PurchaseProduct(PurchaseProductRequest) returns (PurchaseProductResponse);
+  rpc GetProduct(GetProductRequest) returns (Product);
+}
+
+message Product {
+  string product_id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string seller_id = 5;
+}
+
+message Purchase {
+  string purchase_id = 1;
+  string product_id = 2;
+  string buyer_id = 3;
+  int32 quantity = 4;
+  double total_price = 5;
+  google.protobuf.Timestamp purchased_at = 6;
+}
+
+message ListProductRequest {
+  Product product = 1;
+}
+
+message ListProductResponse {
+  Product product = 1;
+  string error_message = 2;
+}
+
+message PurchaseProductRequest {
+  string product_id = 1;
+  string buyer_id = 2;
+  int32 quantity = 3;
+}
+
+message PurchaseProductResponse {
+  Purchase purchase = 1;
+  string error_message = 2;
+}
+
+message GetProductRequest {
+  string product_id = 1;
+}

@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service CryptocurrencyService {
+  rpc GetWallet(GetWalletRequest) returns (Wallet);
+  rpc SendTransaction(SendTransactionRequest) returns (SendTransactionResponse);
+  rpc GetMarketData(GetMarketDataRequest) returns (stream MarketData);
+}
+
+message Wallet {
+  string wallet_id = 1;
+  string user_id = 2;
+  repeated CoinBalance balances = 3;
+}
+
+message CoinBalance {
+  string currency_code = 1;
+  double amount = 2;
+}
+
+message Transaction {
+  string transaction_id = 1;
+  string from_address = 2;
+  string to_address = 3;
+  double amount = 4;
+  string currency = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string status = 7;
+  string from_account_id = 8;
+  string to_account_id = 9;
+  string description = 10;
+}
+
+message MarketData {
+  string currency_code = 1;
+  double price_usd = 2;
+  double market_cap = 3;
+  double volume_24h = 4;
+  double change_24h = 5;
+  google.protobuf.Timestamp last_updated = 6;
+}
+
+message GetWalletRequest {
+  string user_id = 1;
+}
+
+message SendTransactionRequest {
+  string from_wallet_id = 1;
+  string to_address = 2;
+  double amount = 3;
+  string currency_code = 4;
+}
+
+message SendTransactionResponse {
+  Transaction transaction = 1;
+  string error_message = 2;
+}
+
+message GetMarketDataRequest {
+  repeated string currency_codes = 1;
+}

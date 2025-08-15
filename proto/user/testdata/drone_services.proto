@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "user/testdata/dating_platform.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service DroneService {
+  rpc DispatchDrone(DispatchDroneRequest) returns (DispatchDroneResponse);
+  rpc GetDroneStatus(GetDroneStatusRequest) returns (DroneStatus);
+  rpc StreamDroneTelemetry(StreamDroneTelemetryRequest) returns (stream DroneTelemetry);
+}
+
+message Drone {
+  string drone_id = 1;
+  string model = 2;
+  string status = 3;
+  Location current_location = 4;
+  double battery_level = 5;
+}
+
+message Mission {
+  string mission_id = 1;
+  string description = 2;
+  repeated Waypoint waypoints = 3;
+}
+
+message Waypoint {
+  Location location = 1;
+  int32 speed_mph = 2;
+}
+
+message DroneStatus {
+  Drone drone = 1;
+  Mission current_mission = 2;
+}
+
+message DroneTelemetry {
+  string drone_id = 1;
+  Location location = 2;
+  double speed_mph = 3;
+  double battery_level = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+message DispatchDroneRequest {
+  string drone_id = 1;
+  Mission mission = 2;
+}
+
+message DispatchDroneResponse {
+  string mission_id = 1;
+  string error_message = 2;
+}
+
+message GetDroneStatusRequest {
+  string drone_id = 1;
+}
+
+message StreamDroneTelemetryRequest {
+  string drone_id = 1;
+}

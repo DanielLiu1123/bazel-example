@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "user/testdata/dating_platform.proto";
+
+enum ShipmentStatus {
+  SHIPMENT_STATUS_UNSPECIFIED = 0;
+  SHIPMENT_STATUS_CREATED = 1;
+  SHIPMENT_STATUS_PICKED_UP = 2;
+  SHIPMENT_STATUS_IN_TRANSIT = 3;
+  SHIPMENT_STATUS_OUT_FOR_DELIVERY = 4;
+  SHIPMENT_STATUS_DELIVERED = 5;
+  SHIPMENT_STATUS_FAILED_DELIVERY = 6;
+  SHIPMENT_STATUS_RETURNED = 7;
+  SHIPMENT_STATUS_CANCELLED = 8;
+}
+
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service DeliveryTrackingService {
+  rpc TrackPackage(TrackPackageRequest) returns (stream TrackingUpdate);
+  rpc UpdatePackageStatus(UpdatePackageStatusRequest) returns (UpdatePackageStatusResponse);
+  rpc GetPackageInfo(GetPackageInfoRequest) returns (Package);
+}
+
+message Package {
+  string package_id = 1;
+  string tracking_number = 2;
+  
+  message Dimensions {
+    double length_cm = 1;
+    double width_cm = 2;
+    double height_cm = 3;
+    double weight_kg = 4;
+    double volume_m3 = 5;
+  }
+  
+  Dimensions dimensions = 3;
+  
+  message Contents {
+    string description = 1;
+    double declared_value = 2;
+    string currency = 3;
+    repeated string items = 4;
+    bool fragile = 5;
+    bool hazardous = 6;
+    string category = 7;
+  }
+  
+  Contents contents = 4;
+  
+  message Packaging {
+    string packaging_type = 1;
+    string material = 2;
+    bool insured = 3;
+    double insurance_value = 4;
+    repeated string special_handling = 5;
+  }
+  
+  Packaging packaging = 5;
+  string barcode = 6;
+  string qr_code = 7;
+  string carrier = 8;
+  ShipmentStatus status = 9;
+  Location current_location = 10;
+  google.protobuf.Timestamp estimated_delivery = 11;
+  repeated TrackingEvent history = 12;
+}
+
+message TrackingEvent {
+  string status = 1;
+  string description = 2;
+  Location location = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+message TrackingUpdate {
+  string tracking_id = 1;
+  string shipment_id = 2;
+  ShipmentStatus status = 3;
+  Location location = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string description = 6;
+  string notes = 7;
+  
+  message EventDetails {
+    string event_type = 1;
+    string facility_name = 2;
+    string scan_type = 3;
+    map<string, string> additional_info = 4;
+  }
+  
+  EventDetails event_details = 8;
+}
+
+message TrackPackageRequest {
+  string tracking_number = 1;
+}
+
+message UpdatePackageStatusRequest {
+  string tracking_number = 1;
+  string status = 2;
+  Location location = 3;
+}
+
+message UpdatePackageStatusResponse {
+  Package package = 1;
+  string error_message = 2;
+}
+
+message GetPackageInfoRequest {
+  string tracking_number = 1;
+}

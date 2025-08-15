@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service LegalService {
+  rpc RequestConsultation(RequestConsultationRequest) returns (RequestConsultationResponse);
+  rpc GetCaseStatus(GetCaseStatusRequest) returns (CaseStatus);
+  rpc UploadDocument(stream UploadDocumentRequest) returns (UploadDocumentResponse);
+}
+
+message ConsultationRequest {
+  string user_id = 1;
+  string case_description = 2;
+  google.protobuf.Timestamp preferred_time = 3;
+}
+
+message CaseStatus {
+  string case_id = 1;
+  string status = 2;
+  string lawyer_assigned = 3;
+}
+
+message Document {
+  string document_id = 1;
+  string case_id = 2;
+  string file_name = 3;
+  bytes content = 4;
+}
+
+message RequestConsultationRequest {
+  ConsultationRequest request = 1;
+}
+
+message RequestConsultationResponse {
+  string case_id = 1;
+  string error_message = 2;
+}
+
+message GetCaseStatusRequest {
+  string case_id = 1;
+}
+
+message UploadDocumentRequest {
+  oneof data {
+    Document metadata = 1;
+    bytes chunk = 2;
+  }
+}
+
+message UploadDocumentResponse {
+  string document_id = 1;
+  string error_message = 2;
+}

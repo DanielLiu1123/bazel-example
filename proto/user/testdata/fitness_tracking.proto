@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service FitnessTrackingService {
+  rpc LogActivity(LogActivityRequest) returns (LogActivityResponse);
+  rpc GetDailySummary(GetDailySummaryRequest) returns (DailySummary);
+  rpc GetActivityHistory(GetActivityHistoryRequest) returns (stream Activity);
+}
+
+message Activity {
+  string activity_id = 1;
+  string user_id = 2;
+  string type = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  double calories_burned = 6;
+  double distance_km = 7;
+  int32 steps = 8;
+}
+
+message DailySummary {
+  string user_id = 1;
+  google.protobuf.Timestamp date = 2;
+  double total_calories_burned = 3;
+  double total_distance_km = 4;
+  int32 total_steps = 5;
+  repeated Activity activities = 6;
+}
+
+message LogActivityRequest {
+  Activity activity = 1;
+}
+
+message LogActivityResponse {
+  Activity activity = 1;
+  string error_message = 2;
+}
+
+message GetDailySummaryRequest {
+  string user_id = 1;
+  google.protobuf.Timestamp date = 2;
+}
+
+message GetActivityHistoryRequest {
+  string user_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}

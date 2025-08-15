@@ -1,0 +1,330 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service EducationService {
+  rpc EnrollStudent(EnrollStudentRequest) returns (EnrollStudentResponse);
+  rpc CreateCourse(CreateCourseRequest) returns (CreateCourseResponse);
+  rpc SubmitAssignment(SubmitAssignmentRequest) returns (SubmitAssignmentResponse);
+  rpc GradeAssignment(GradeAssignmentRequest) returns (GradeAssignmentResponse);
+  rpc GetTranscript(GetTranscriptRequest) returns (GetTranscriptResponse);
+}
+
+enum GradeLevel {
+  GRADE_LEVEL_UNSPECIFIED = 0;
+  GRADE_LEVEL_KINDERGARTEN = 1;
+  GRADE_LEVEL_ELEMENTARY = 2;
+  GRADE_LEVEL_MIDDLE_SCHOOL = 3;
+  GRADE_LEVEL_HIGH_SCHOOL = 4;
+  GRADE_LEVEL_UNDERGRADUATE = 5;
+  GRADE_LEVEL_GRADUATE = 6;
+  GRADE_LEVEL_DOCTORAL = 7;
+}
+
+enum Subject {
+  SUBJECT_UNSPECIFIED = 0;
+  SUBJECT_MATHEMATICS = 1;
+  SUBJECT_SCIENCE = 2;
+  SUBJECT_ENGLISH = 3;
+  SUBJECT_HISTORY = 4;
+  SUBJECT_ART = 5;
+  SUBJECT_MUSIC = 6;
+  SUBJECT_PHYSICAL_EDUCATION = 7;
+  SUBJECT_COMPUTER_SCIENCE = 8;
+}
+
+message Student {
+  string student_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  google.protobuf.Timestamp date_of_birth = 5;
+  GradeLevel grade_level = 6;
+  
+  message ContactInfo {
+    string phone = 1;
+    string address = 2;
+    string emergency_contact = 3;
+    string emergency_phone = 4;
+  }
+  
+  ContactInfo contact = 7;
+  
+  message AcademicInfo {
+    string student_number = 1;
+    google.protobuf.Timestamp enrollment_date = 2;
+    string major = 3;
+    string minor = 4;
+    double gpa = 5;
+    int32 credits_earned = 6;
+    string academic_status = 7;
+  }
+  
+  AcademicInfo academic = 8;
+  repeated string enrolled_courses = 9;
+}
+
+message Instructor {
+  string instructor_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  string department = 5;
+  
+  message Qualifications {
+    repeated string degrees = 1;
+    repeated string certifications = 2;
+    int32 years_experience = 3;
+    repeated string specializations = 4;
+  }
+  
+  Qualifications qualifications = 6;
+  
+  message ContactInfo {
+    string office_location = 1;
+    string phone = 2;
+    repeated string office_hours = 3;
+  }
+  
+  ContactInfo contact = 7;
+  repeated string teaching_courses = 8;
+}
+
+message Course {
+  string course_id = 1;
+  string course_code = 2;
+  string title = 3;
+  string description = 4;
+  Subject subject = 5;
+  GradeLevel level = 6;
+  int32 credits = 7;
+  
+  message Schedule {
+    repeated string meeting_days = 1;
+    string start_time = 2;
+    string end_time = 3;
+    string location = 4;
+    google.protobuf.Timestamp start_date = 5;
+    google.protobuf.Timestamp end_date = 6;
+  }
+  
+  Schedule schedule = 8;
+  
+  message Requirements {
+    repeated string prerequisites = 1;
+    repeated string corequisites = 2;
+    int32 max_enrollment = 3;
+    string grading_scale = 4;
+  }
+  
+  Requirements requirements = 9;
+  
+  message Materials {
+    repeated string textbooks = 1;
+    repeated string supplies = 2;
+    repeated string software = 3;
+    repeated string resources = 4;
+  }
+  
+  Materials materials = 10;
+  string instructor_id = 11;
+  repeated string enrolled_students = 12;
+}
+
+message Assignment {
+  string assignment_id = 1;
+  string course_id = 2;
+  string title = 3;
+  string description = 4;
+  string type = 5;
+  
+  message Grading {
+    int32 total_points = 1;
+    string grading_rubric = 2;
+    bool allow_late_submission = 3;
+    double late_penalty_percent = 4;
+  }
+  
+  Grading grading = 6;
+  
+  message Timeline {
+    google.protobuf.Timestamp assigned_date = 1;
+    google.protobuf.Timestamp due_date = 2;
+    google.protobuf.Timestamp available_from = 3;
+    google.protobuf.Timestamp available_until = 4;
+  }
+  
+  Timeline timeline = 7;
+  
+  message Instructions {
+    string content = 1;
+    repeated string attachments = 2;
+    repeated string submission_formats = 3;
+    string submission_method = 4;
+  }
+  
+  Instructions instructions = 8;
+}
+
+message Submission {
+  string submission_id = 1;
+  string assignment_id = 2;
+  string student_id = 3;
+  google.protobuf.Timestamp submitted_at = 4;
+  
+  message Content {
+    string text_content = 1;
+    repeated string file_attachments = 2;
+    repeated string links = 3;
+    map<string, string> metadata = 4;
+  }
+  
+  Content content = 5;
+  
+  message Grade {
+    double points_earned = 1;
+    double points_possible = 2;
+    string letter_grade = 3;
+    double percentage = 4;
+    string feedback = 5;
+    google.protobuf.Timestamp graded_at = 6;
+    string graded_by = 7;
+  }
+  
+  Grade grade = 6;
+  bool is_late = 7;
+  int32 attempt_number = 8;
+}
+
+message Exam {
+  string exam_id = 1;
+  string course_id = 2;
+  string title = 3;
+  string type = 4;
+  
+  message Schedule {
+    google.protobuf.Timestamp start_time = 1;
+    google.protobuf.Duration duration = 2;
+    string location = 3;
+    repeated string allowed_materials = 4;
+  }
+  
+  Schedule schedule = 5;
+  
+  message Questions {
+    repeated string question_ids = 1;
+    int32 total_questions = 2;
+    int32 total_points = 3;
+    string format = 4;
+  }
+  
+  Questions questions = 6;
+  
+  message Settings {
+    bool randomize_questions = 1;
+    bool allow_backtrack = 2;
+    bool show_results_immediately = 3;
+    int32 attempts_allowed = 4;
+  }
+  
+  Settings settings = 7;
+}
+
+message Grade {
+  string grade_id = 1;
+  string student_id = 2;
+  string course_id = 3;
+  string assignment_id = 4;
+  
+  message Score {
+    double points_earned = 1;
+    double points_possible = 2;
+    double percentage = 3;
+    string letter_grade = 4;
+    double gpa_points = 5;
+  }
+  
+  Score score = 5;
+  string feedback = 6;
+  google.protobuf.Timestamp graded_date = 7;
+  string graded_by = 8;
+  bool is_final = 9;
+}
+
+message EnrollStudentRequest {
+  string student_id = 1;
+  string course_id = 2;
+  google.protobuf.Timestamp enrollment_date = 3;
+  string enrollment_type = 4;
+}
+
+message EnrollStudentResponse {
+  bool success = 1;
+  string error_message = 2;
+  string enrollment_id = 3;
+}
+
+message CreateCourseRequest {
+  Course course = 1;
+  bool validate_instructor = 2;
+  bool check_conflicts = 3;
+}
+
+message CreateCourseResponse {
+  Course course = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+}
+
+message SubmitAssignmentRequest {
+  string assignment_id = 1;
+  string student_id = 2;
+  Submission submission = 3;
+  bool is_final_submission = 4;
+}
+
+message SubmitAssignmentResponse {
+  Submission submission = 1;
+  bool success = 2;
+  string error_message = 3;
+  bool requires_plagiarism_check = 4;
+}
+
+message GradeAssignmentRequest {
+  string submission_id = 1;
+  string instructor_id = 2;
+  Grade grade = 3;
+  bool publish_immediately = 4;
+}
+
+message GradeAssignmentResponse {
+  Grade grade = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message GetTranscriptRequest {
+  string student_id = 1;
+  bool include_in_progress = 2;
+  string format = 3;
+}
+
+message GetTranscriptResponse {
+  message Transcript {
+    Student student = 1;
+    repeated Grade grades = 2;
+    double cumulative_gpa = 3;
+    int32 total_credits = 4;
+    google.protobuf.Timestamp generated_at = 5;
+  }
+  
+  Transcript transcript = 1;
+  bool success = 2;
+  string error_message = 3;
+}

@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service ConferenceService {
+  rpc ScheduleConference(ScheduleConferenceRequest) returns (ScheduleConferenceResponse);
+  rpc JoinConference(JoinConferenceRequest) returns (stream ConferenceEvent);
+  rpc LeaveConference(LeaveConferenceRequest) returns (LeaveConferenceResponse);
+  rpc GetConferenceInfo(GetConferenceInfoRequest) returns (Conference);
+}
+
+message Conference {
+  string conference_id = 1;
+  string title = 2;
+  string description = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  repeated Participant participants = 6;
+  string meeting_url = 7;
+}
+
+message Participant {
+  string user_id = 1;
+  string display_name = 2;
+  bool is_moderator = 3;
+  bool is_muted = 4;
+  bool is_video_on = 5;
+}
+
+message ScheduleConferenceRequest {
+  Conference conference = 1;
+}
+
+message ScheduleConferenceResponse {
+  Conference conference = 1;
+  string error_message = 2;
+}
+
+message JoinConferenceRequest {
+  string conference_id = 1;
+  string user_id = 2;
+}
+
+message LeaveConferenceRequest {
+  string conference_id = 1;
+  string user_id = 2;
+}
+
+message LeaveConferenceResponse {
+  bool success = 1;
+}
+
+message GetConferenceInfoRequest {
+  string conference_id = 1;
+}
+
+message ConferenceEvent {
+  oneof event {
+    ParticipantJoined participant_joined = 1;
+    ParticipantLeft participant_left = 2;
+    ChatMessage chat_message = 3;
+  }
+}
+
+message ParticipantJoined {
+  Participant participant = 1;
+}
+
+message ParticipantLeft {
+  string user_id = 1;
+}
+
+message ChatMessage {
+  string user_id = 1;
+  string message = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service WeatherService {
+  rpc GetCurrentWeather(GetCurrentWeatherRequest) returns (Weather);
+  rpc GetWeatherForecast(GetWeatherForecastRequest) returns (stream Weather);
+  rpc ReportWeatherCondition(ReportWeatherConditionRequest) returns (ReportWeatherConditionResponse);
+}
+
+message Weather {
+  string location = 1;
+  double temperature_celsius = 2;
+  double humidity = 3;
+  double wind_speed_kph = 4;
+  string condition = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+message GetCurrentWeatherRequest {
+  string location = 1;
+}
+
+message GetWeatherForecastRequest {
+  string location = 1;
+}
+
+message ReportWeatherConditionRequest {
+  Weather weather = 1;
+}
+
+message ReportWeatherConditionResponse {
+  bool success = 1;
+  string error_message = 2;
+}

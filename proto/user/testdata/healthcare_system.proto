@@ -1,0 +1,339 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service HealthcareService {
+  rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse);
+  rpc ScheduleAppointment(ScheduleAppointmentRequest) returns (ScheduleAppointmentResponse);
+  rpc UpdateMedicalRecord(UpdateMedicalRecordRequest) returns (UpdateMedicalRecordResponse);
+  rpc GetPatientHistory(GetPatientHistoryRequest) returns (stream MedicalEvent);
+  rpc PrescribeMedication(PrescribeMedicationRequest) returns (PrescribeMedicationResponse);
+}
+
+enum BloodType {
+  BLOOD_TYPE_UNSPECIFIED = 0;
+  BLOOD_TYPE_A_POSITIVE = 1;
+  BLOOD_TYPE_A_NEGATIVE = 2;
+  BLOOD_TYPE_B_POSITIVE = 3;
+  BLOOD_TYPE_B_NEGATIVE = 4;
+  BLOOD_TYPE_AB_POSITIVE = 5;
+  BLOOD_TYPE_AB_NEGATIVE = 6;
+  BLOOD_TYPE_O_POSITIVE = 7;
+  BLOOD_TYPE_O_NEGATIVE = 8;
+}
+
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_MALE = 1;
+  GENDER_FEMALE = 2;
+  GENDER_OTHER = 3;
+  GENDER_PREFER_NOT_TO_SAY = 4;
+}
+
+enum AppointmentStatus {
+  APPOINTMENT_STATUS_UNSPECIFIED = 0;
+  APPOINTMENT_STATUS_SCHEDULED = 1;
+  APPOINTMENT_STATUS_CONFIRMED = 2;
+  APPOINTMENT_STATUS_IN_PROGRESS = 3;
+  APPOINTMENT_STATUS_COMPLETED = 4;
+  APPOINTMENT_STATUS_CANCELLED = 5;
+  APPOINTMENT_STATUS_NO_SHOW = 6;
+}
+
+message Patient {
+  string patient_id = 1;
+  string medical_record_number = 2;
+  
+  message PersonalInfo {
+    string first_name = 1;
+    string last_name = 2;
+    string middle_name = 3;
+    google.protobuf.Timestamp date_of_birth = 4;
+    Gender gender = 5;
+    string social_security_number = 6;
+    
+    message ContactInfo {
+      string phone_primary = 1;
+      string phone_secondary = 2;
+      string email = 3;
+      
+      message Address {
+        string street_address = 1;
+        string city = 2;
+        string state = 3;
+        string zip_code = 4;
+        string country = 5;
+        bool is_primary = 6;
+      }
+      
+      repeated Address addresses = 4;
+    }
+    
+    ContactInfo contact = 7;
+  }
+  
+  PersonalInfo personal_info = 3;
+  
+  message MedicalInfo {
+    BloodType blood_type = 1;
+    double height_cm = 2;
+    double weight_kg = 3;
+    
+    message Allergy {
+      string allergen = 1;
+      string reaction = 2;
+      string severity = 3;
+      google.protobuf.Timestamp discovered_date = 4;
+      string notes = 5;
+    }
+    
+    repeated Allergy allergies = 4;
+    
+    message ChronicCondition {
+      string condition_name = 1;
+      string icd_code = 2;
+      google.protobuf.Timestamp diagnosed_date = 3;
+      string status = 4;
+      string treating_physician = 5;
+    }
+    
+    repeated ChronicCondition chronic_conditions = 5;
+    repeated string family_history = 6;
+  }
+  
+  MedicalInfo medical_info = 4;
+  
+  message Insurance {
+    string insurance_id = 1;
+    string provider_name = 2;
+    string policy_number = 3;
+    string group_number = 4;
+    google.protobuf.Timestamp effective_date = 5;
+    google.protobuf.Timestamp expiration_date = 6;
+    string primary_holder = 7;
+  }
+  
+  repeated Insurance insurance_info = 5;
+  
+  message EmergencyContact {
+    string name = 1;
+    string relationship = 2;
+    string phone = 3;
+    string email = 4;
+    bool is_primary = 5;
+  }
+  
+  repeated EmergencyContact emergency_contacts = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message HealthcareProvider {
+  string provider_id = 1;
+  string license_number = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string specialty = 5;
+  
+  message Credentials {
+    repeated string degrees = 1;
+    repeated string certifications = 2;
+    repeated string board_certifications = 3;
+    int32 years_experience = 4;
+  }
+  
+  Credentials credentials = 6;
+  
+  message ContactInfo {
+    string phone = 1;
+    string email = 2;
+    string office_address = 3;
+    repeated string hospital_affiliations = 4;
+  }
+  
+  ContactInfo contact = 7;
+  bool is_accepting_patients = 8;
+}
+
+message Appointment {
+  string appointment_id = 1;
+  string patient_id = 2;
+  string provider_id = 3;
+  google.protobuf.Timestamp scheduled_time = 4;
+  google.protobuf.Duration duration = 5;
+  AppointmentStatus status = 6;
+  string appointment_type = 7;
+  string reason = 8;
+  string location = 9;
+  
+  message Notes {
+    string patient_notes = 1;
+    string provider_notes = 2;
+    string administrative_notes = 3;
+  }
+  
+  Notes notes = 10;
+  
+  message Reminder {
+    google.protobuf.Timestamp reminder_time = 1;
+    string reminder_method = 2;
+    bool sent = 3;
+  }
+  
+  repeated Reminder reminders = 11;
+  google.protobuf.Timestamp created_at = 12;
+}
+
+message MedicalRecord {
+  string record_id = 1;
+  string patient_id = 2;
+  string provider_id = 3;
+  google.protobuf.Timestamp visit_date = 4;
+  
+  message VitalSigns {
+    double temperature_celsius = 1;
+    int32 blood_pressure_systolic = 2;
+    int32 blood_pressure_diastolic = 3;
+    int32 heart_rate_bpm = 4;
+    int32 respiratory_rate = 5;
+    double oxygen_saturation = 6;
+    double weight_kg = 7;
+    double height_cm = 8;
+  }
+  
+  VitalSigns vital_signs = 5;
+  
+  message Diagnosis {
+    string diagnosis_code = 1;
+    string diagnosis_description = 2;
+    string type = 3;
+    string status = 4;
+    google.protobuf.Timestamp onset_date = 5;
+  }
+  
+  repeated Diagnosis diagnoses = 6;
+  
+  message Treatment {
+    string treatment_id = 1;
+    string treatment_type = 2;
+    string description = 3;
+    google.protobuf.Timestamp start_date = 4;
+    google.protobuf.Timestamp end_date = 5;
+    string outcome = 6;
+  }
+  
+  repeated Treatment treatments = 7;
+  string chief_complaint = 8;
+  string history_present_illness = 9;
+  string physical_examination = 10;
+  string assessment_plan = 11;
+  repeated string follow_up_instructions = 12;
+}
+
+message Medication {
+  string medication_id = 1;
+  string name = 2;
+  string generic_name = 3;
+  string brand_name = 4;
+  string dosage_form = 5;
+  string strength = 6;
+  
+  message Prescription {
+    string prescription_id = 1;
+    string patient_id = 2;
+    string prescriber_id = 3;
+    string dosage_instructions = 4;
+    int32 quantity = 5;
+    int32 refills_remaining = 6;
+    google.protobuf.Timestamp prescribed_date = 7;
+    google.protobuf.Timestamp expiration_date = 8;
+    string pharmacy_id = 9;
+  }
+  
+  Prescription prescription_info = 7;
+  
+  message SideEffects {
+    repeated string common_side_effects = 1;
+    repeated string serious_side_effects = 2;
+    repeated string drug_interactions = 3;
+  }
+  
+  SideEffects side_effects = 8;
+}
+
+message CreatePatientRequest {
+  Patient patient = 1;
+  bool validate_insurance = 2;
+  bool send_welcome_packet = 3;
+}
+
+message CreatePatientResponse {
+  Patient patient = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+}
+
+message ScheduleAppointmentRequest {
+  Appointment appointment = 1;
+  bool send_confirmation = 2;
+  repeated string reminder_preferences = 3;
+}
+
+message ScheduleAppointmentResponse {
+  Appointment appointment = 1;
+  bool success = 2;
+  string error_message = 3;
+  repeated google.protobuf.Timestamp alternative_times = 4;
+}
+
+message UpdateMedicalRecordRequest {
+  MedicalRecord record = 1;
+  repeated string update_fields = 2;
+  bool require_provider_signature = 3;
+}
+
+message UpdateMedicalRecordResponse {
+  MedicalRecord record = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+}
+
+message GetPatientHistoryRequest {
+  string patient_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  repeated string record_types = 4;
+}
+
+message MedicalEvent {
+  string event_id = 1;
+  string event_type = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  
+  oneof event_data {
+    Appointment appointment = 4;
+    MedicalRecord medical_record = 5;
+    Medication medication = 6;
+  }
+}
+
+message PrescribeMedicationRequest {
+  string patient_id = 1;
+  string provider_id = 2;
+  Medication medication = 3;
+  bool check_interactions = 4;
+  string pharmacy_id = 5;
+}
+
+message PrescribeMedicationResponse {
+  Medication medication = 1;
+  bool success = 2;
+  repeated string warnings = 3;
+  repeated string drug_interactions = 4;
+}

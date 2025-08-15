@@ -1,0 +1,337 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service GamingService {
+  rpc CreatePlayer(CreatePlayerRequest) returns (CreatePlayerResponse);
+  rpc StartGame(StartGameRequest) returns (StartGameResponse);
+  rpc UpdateGameState(UpdateGameStateRequest) returns (UpdateGameStateResponse);
+  rpc GetLeaderboard(GetLeaderboardRequest) returns (GetLeaderboardResponse);
+  rpc ProcessAchievement(ProcessAchievementRequest) returns (ProcessAchievementResponse);
+}
+
+enum GameGenre {
+  GAME_GENRE_UNSPECIFIED = 0;
+  GAME_GENRE_ACTION = 1;
+  GAME_GENRE_ADVENTURE = 2;
+  GAME_GENRE_RPG = 3;
+  GAME_GENRE_STRATEGY = 4;
+  GAME_GENRE_PUZZLE = 5;
+  GAME_GENRE_SPORTS = 6;
+  GAME_GENRE_RACING = 7;
+  GAME_GENRE_SIMULATION = 8;
+}
+
+enum PlayerStatus {
+  PLAYER_STATUS_UNSPECIFIED = 0;
+  PLAYER_STATUS_ONLINE = 1;
+  PLAYER_STATUS_OFFLINE = 2;
+  PLAYER_STATUS_AWAY = 3;
+  PLAYER_STATUS_BUSY = 4;
+  PLAYER_STATUS_INVISIBLE = 5;
+}
+
+message Player {
+  string player_id = 1;
+  string username = 2;
+  string display_name = 3;
+  string email = 4;
+  PlayerStatus status = 5;
+  
+  message Profile {
+    string avatar_url = 1;
+    string bio = 2;
+    string country = 3;
+    string preferred_language = 4;
+    google.protobuf.Timestamp joined_date = 5;
+    google.protobuf.Timestamp last_active = 6;
+  }
+  
+  Profile profile = 6;
+  
+  message Statistics {
+    int32 total_games_played = 1;
+    int32 total_wins = 2;
+    int32 total_losses = 3;
+    double win_rate = 4;
+    int64 total_playtime_seconds = 5;
+    int32 current_level = 6;
+    int64 experience_points = 7;
+    int32 ranking = 8;
+  }
+  
+  Statistics stats = 7;
+  
+  message Preferences {
+    bool sound_enabled = 1;
+    bool music_enabled = 2;
+    double volume_level = 3;
+    string graphics_quality = 4;
+    bool notifications_enabled = 5;
+    repeated string favorite_genres = 6;
+  }
+  
+  Preferences preferences = 8;
+  repeated string friend_ids = 9;
+  repeated string blocked_player_ids = 10;
+}
+
+message Game {
+  string game_id = 1;
+  string title = 2;
+  string description = 3;
+  GameGenre genre = 4;
+  string version = 5;
+  
+  message GameSettings {
+    int32 min_players = 1;
+    int32 max_players = 2;
+    google.protobuf.Duration average_duration = 3;
+    string difficulty_level = 4;
+    bool supports_multiplayer = 5;
+    bool supports_ai = 6;
+  }
+  
+  GameSettings settings = 6;
+  
+  message Assets {
+    repeated string image_urls = 1;
+    repeated string video_urls = 2;
+    string icon_url = 3;
+    string banner_url = 4;
+    repeated string screenshot_urls = 5;
+  }
+  
+  Assets assets = 7;
+  
+  message Monetization {
+    bool is_free = 1;
+    double base_price = 2;
+    string currency = 3;
+    bool has_in_app_purchases = 4;
+    bool has_ads = 5;
+    repeated string dlc_available = 6;
+  }
+  
+  Monetization monetization = 8;
+  google.protobuf.Timestamp release_date = 9;
+  google.protobuf.Timestamp last_updated = 10;
+}
+
+message GameSession {
+  string session_id = 1;
+  string game_id = 2;
+  repeated string player_ids = 3;
+  
+  message SessionState {
+    string current_state = 1;
+    int32 current_round = 2;
+    int32 total_rounds = 3;
+    google.protobuf.Timestamp started_at = 4;
+    google.protobuf.Timestamp last_updated = 5;
+    google.protobuf.Duration elapsed_time = 6;
+  }
+  
+  SessionState state = 4;
+  
+  message PlayerState {
+    string player_id = 1;
+    int32 score = 2;
+    int32 level = 3;
+    int32 lives_remaining = 4;
+    map<string, int32> resources = 5;
+    repeated string inventory_items = 6;
+    string current_position = 7;
+  }
+  
+  repeated PlayerState player_states = 5;
+  
+  message GameEvents {
+    repeated string event_log = 1;
+    map<string, int32> event_counters = 2;
+    repeated string achievements_unlocked = 3;
+  }
+  
+  GameEvents events = 6;
+  map<string, string> custom_data = 7;
+}
+
+message Achievement {
+  string achievement_id = 1;
+  string name = 2;
+  string description = 3;
+  string icon_url = 4;
+  
+  message Requirements {
+    string condition_type = 1;
+    int32 target_value = 2;
+    string metric_name = 3;
+    repeated string prerequisite_achievements = 4;
+  }
+  
+  Requirements requirements = 5;
+  
+  message Rewards {
+    int32 experience_points = 1;
+    int32 coins = 2;
+    repeated string items = 3;
+    string badge_url = 4;
+    string title_unlock = 5;
+  }
+  
+  Rewards rewards = 6;
+  
+  enum Rarity {
+    RARITY_UNSPECIFIED = 0;
+    RARITY_COMMON = 1;
+    RARITY_UNCOMMON = 2;
+    RARITY_RARE = 3;
+    RARITY_EPIC = 4;
+    RARITY_LEGENDARY = 5;
+  }
+  
+  Rarity rarity = 7;
+  bool is_hidden = 8;
+  double completion_percentage = 9;
+}
+
+message Leaderboard {
+  string leaderboard_id = 1;
+  string game_id = 2;
+  string leaderboard_type = 3;
+  
+  message Entry {
+    int32 rank = 1;
+    string player_id = 2;
+    string player_name = 3;
+    int64 score = 4;
+    google.protobuf.Timestamp achieved_at = 5;
+    map<string, string> additional_data = 6;
+  }
+  
+  repeated Entry entries = 4;
+  
+  message TimeFrame {
+    google.protobuf.Timestamp start_time = 1;
+    google.protobuf.Timestamp end_time = 2;
+    string period_type = 3;
+  }
+  
+  TimeFrame time_frame = 5;
+  google.protobuf.Timestamp last_updated = 6;
+}
+
+message Tournament {
+  string tournament_id = 1;
+  string name = 2;
+  string description = 3;
+  string game_id = 4;
+  
+  message Schedule {
+    google.protobuf.Timestamp registration_start = 1;
+    google.protobuf.Timestamp registration_end = 2;
+    google.protobuf.Timestamp tournament_start = 3;
+    google.protobuf.Timestamp tournament_end = 4;
+  }
+  
+  Schedule schedule = 5;
+  
+  message Rules {
+    int32 max_participants = 1;
+    string format = 2;
+    int32 rounds = 3;
+    google.protobuf.Duration match_duration = 4;
+    repeated string special_rules = 5;
+  }
+  
+  Rules rules = 6;
+  
+  message Prizes {
+    string first_place = 1;
+    string second_place = 2;
+    string third_place = 3;
+    repeated string participation_rewards = 4;
+  }
+  
+  Prizes prizes = 7;
+  repeated string registered_players = 8;
+  string status = 9;
+}
+
+message CreatePlayerRequest {
+  Player player = 1;
+  string password = 2;
+  bool accept_terms = 3;
+  string referral_code = 4;
+}
+
+message CreatePlayerResponse {
+  Player player = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+  string activation_token = 4;
+}
+
+message StartGameRequest {
+  string game_id = 1;
+  repeated string player_ids = 2;
+  map<string, string> game_settings = 3;
+  bool private_session = 4;
+}
+
+message StartGameResponse {
+  GameSession session = 1;
+  bool success = 2;
+  string error_message = 3;
+  string join_code = 4;
+}
+
+message UpdateGameStateRequest {
+  string session_id = 1;
+  string player_id = 2;
+  map<string, string> state_updates = 3;
+  repeated string actions = 4;
+}
+
+message UpdateGameStateResponse {
+  GameSession updated_session = 1;
+  bool success = 2;
+  repeated string validation_errors = 3;
+  bool game_ended = 4;
+  repeated string winners = 5;
+}
+
+message GetLeaderboardRequest {
+  string game_id = 1;
+  string leaderboard_type = 2;
+  string time_period = 3;
+  int32 limit = 4;
+  int32 offset = 5;
+}
+
+message GetLeaderboardResponse {
+  Leaderboard leaderboard = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message ProcessAchievementRequest {
+  string player_id = 1;
+  string achievement_id = 2;
+  map<string, int32> progress_data = 3;
+  string trigger_event = 4;
+}
+
+message ProcessAchievementResponse {
+  Achievement achievement = 1;
+  bool unlocked = 2;
+  bool success = 3;
+  int32 current_progress = 4;
+  int32 required_progress = 5;
+}

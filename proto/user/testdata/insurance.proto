@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service InsuranceService {
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+  rpc PurchasePolicy(PurchasePolicyRequest) returns (PurchasePolicyResponse);
+  rpc FileClaim(FileClaimRequest) returns (FileClaimResponse);
+}
+
+message Policy {
+  string policy_id = 1;
+  string user_id = 2;
+  string type = 3;
+  double premium = 4;
+  double coverage_amount = 5;
+  google.protobuf.Timestamp start_date = 6;
+  google.protobuf.Timestamp end_date = 7;
+}
+
+message Claim {
+  string claim_id = 1;
+  string policy_id = 2;
+  string description = 3;
+  double amount = 4;
+  string status = 5;
+  google.protobuf.Timestamp date_filed = 6;
+}
+
+message GetQuoteRequest {
+  string user_id = 1;
+  string type = 2;
+  double coverage_amount = 3;
+}
+
+message GetQuoteResponse {
+  double premium = 1;
+}
+
+message PurchasePolicyRequest {
+  string user_id = 1;
+  string type = 2;
+  double coverage_amount = 3;
+}
+
+message PurchasePolicyResponse {
+  Policy policy = 1;
+  string error_message = 2;
+}
+
+message FileClaimRequest {
+  string policy_id = 1;
+  string description = 2;
+  double amount = 3;
+}
+
+message FileClaimResponse {
+  Claim claim = 1;
+  string error_message = 2;
+}

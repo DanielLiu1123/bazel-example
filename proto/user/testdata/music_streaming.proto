@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service MusicStreamingService {
+  rpc PlaySong(PlaySongRequest) returns (stream SongFragment);
+  rpc CreatePlaylist(CreatePlaylistRequest) returns (CreatePlaylistResponse);
+  rpc AddToPlaylist(AddToPlaylistRequest) returns (AddToPlaylistResponse);
+}
+
+message Song {
+  string song_id = 1;
+  string title = 2;
+  string artist = 3;
+  string album = 4;
+  int32 duration_seconds = 5;
+}
+
+message Playlist {
+  string playlist_id = 1;
+  string name = 2;
+  string user_id = 3;
+  repeated Song songs = 4;
+}
+
+message SongFragment {
+  bytes data = 1;
+}
+
+message PlaySongRequest {
+  string song_id = 1;
+}
+
+message CreatePlaylistRequest {
+  string name = 1;
+  string user_id = 2;
+}
+
+message CreatePlaylistResponse {
+  Playlist playlist = 1;
+  string error_message = 2;
+}
+
+message AddToPlaylistRequest {
+  string playlist_id = 1;
+  string song_id = 2;
+}
+
+message AddToPlaylistResponse {
+  Playlist playlist = 1;
+  string error_message = 2;
+}

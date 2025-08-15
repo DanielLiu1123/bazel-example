@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service SubscriptionBoxService {
+  rpc Subscribe(SubscribeRequest) returns (SubscribeResponse);
+  rpc GetSubscription(GetSubscriptionRequest) returns (Subscription);
+  rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+}
+
+message Subscription {
+  string subscription_id = 1;
+  string user_id = 2;
+  string box_type = 3;
+  string status = 4;
+  google.protobuf.Timestamp next_shipment_date = 5;
+}
+
+message SubscribeRequest {
+  string user_id = 1;
+  string box_type = 2;
+}
+
+message SubscribeResponse {
+  Subscription subscription = 1;
+  string error_message = 2;
+}
+
+message GetSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CancelSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message CancelSubscriptionResponse {
+  bool success = 1;
+  string error_message = 2;
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "user/testdata/account_management.proto";
+import "user/testdata/cryptocurrency.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service FinancialService {
+  rpc GetAccountBalance(GetAccountBalanceRequest) returns (GetAccountBalanceResponse);
+  rpc TransferFunds(TransferFundsRequest) returns (TransferFundsResponse);
+  rpc GetTransactionHistory(GetTransactionHistoryRequest) returns (stream Transaction);
+}
+
+message GetAccountBalanceRequest {
+  string account_id = 1;
+}
+
+message GetAccountBalanceResponse {
+  Account account = 1;
+}
+
+message TransferFundsRequest {
+  string from_account_id = 1;
+  string to_account_id = 2;
+  double amount = 3;
+  string currency = 4;
+}
+
+message TransferFundsResponse {
+  Transaction transaction = 1;
+  string error_message = 2;
+}
+
+message GetTransactionHistoryRequest {
+  string account_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+}

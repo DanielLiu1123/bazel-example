@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package user.testdata;
+
+import "google/protobuf/timestamp.proto";
+import "user/testdata/messaging_platform.proto";
+
+option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option java_multiple_files = true;
+
+service DatingPlatformService {
+  rpc CreateProfile(CreateProfileRequest) returns (CreateProfileResponse);
+  rpc GetMatches(GetMatchesRequest) returns (GetMatchesResponse);
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc GetMessages(GetMessagesRequest) returns (stream Message);
+}
+
+message Profile {
+  string user_id = 1;
+  string display_name = 2;
+  int32 age = 3;
+  string gender = 4;
+  string bio = 5;
+  repeated string interests = 6;
+  repeated string photos = 7;
+  Location location = 8;
+}
+
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+  string address = 3;
+  string city = 4;
+  string state = 5;
+  string postal_code = 6;
+  string country = 7;
+  
+  message ContactInfo {
+    string contact_name = 1;
+    string phone = 2;
+    string email = 3;
+    string company_name = 4;
+  }
+  
+  ContactInfo contact = 8;
+  
+  message AccessInfo {
+    string building_type = 1;
+    string floor = 2;
+    string unit_number = 3;
+    string access_code = 4;
+    repeated string delivery_instructions = 5;
+    bool requires_appointment = 6;
+  }
+  
+  AccessInfo access_info = 9;
+  string location_id = 10;
+}
+
+message Match {
+  Profile profile = 1;
+  double match_score = 2;
+}
+
+message CreateProfileRequest {
+  Profile profile = 1;
+}
+
+message CreateProfileResponse {
+  Profile profile = 1;
+  string error_message = 2;
+}
+
+message GetMatchesRequest {
+  string user_id = 1;
+}
+
+message GetMatchesResponse {
+  repeated Match matches = 1;
+}
+
+
