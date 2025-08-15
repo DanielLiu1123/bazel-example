@@ -3,13 +3,14 @@ syntax = "proto3";
 package user.testdata;
 
 import "google/protobuf/timestamp.proto";
+import "user/testdata/delivery_tracking.proto";
 
 option go_package = "github.com/example/bazel-example/proto/user/testdata";
 option java_multiple_files = true;
 
 service LogisticsService {
   rpc CreateShipment(CreateShipmentRequest) returns (CreateShipmentResponse);
-  rpc TrackShipment(TrackShipmentRequest) returns (stream ShipmentStatus);
+  rpc TrackShipment(TrackShipmentRequest) returns (stream TrackingUpdate);
   rpc UpdateShipmentLocation(UpdateShipmentLocationRequest) returns (UpdateShipmentLocationResponse);
 }
 
@@ -19,13 +20,6 @@ message Shipment {
   string destination = 3;
   string status = 4;
   google.protobuf.Timestamp estimated_delivery = 5;
-}
-
-message ShipmentStatus {
-  string shipment_id = 1;
-  string status = 2;
-  string location = 3;
-  google.protobuf.Timestamp timestamp = 4;
 }
 
 message CreateShipmentRequest {

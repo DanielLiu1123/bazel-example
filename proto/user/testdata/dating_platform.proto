@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user.testdata;
 
-import "google/protobuf/timestamp.proto";
+
 import "user/testdata/messaging_platform.proto";
 
 option go_package = "github.com/example/bazel-example/proto/user/testdata";

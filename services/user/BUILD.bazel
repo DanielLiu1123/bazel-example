@@ -19,9 +19,8 @@ java_library(
         "//:mapstruct_lib",
     ],
     runtime_deps = [
-        "@maven//:org_springframework_boot_spring_boot_loader",
-        "@maven//:org_springframework_boot_spring_boot_loader_tools",
         "@maven//:org_springframework_boot_spring_boot_jarmode_tools",
+        "@maven//:org_springframework_boot_spring_boot_loader_tools",
     ],
 )
 

@@ -20,7 +20,7 @@ message Rocket {
   string status = 4;
 }
 
-message Mission {
+message SpaceMission {
   string mission_id = 1;
   string name = 2;
   string destination = 3;
@@ -49,7 +49,7 @@ message MissionStatus {
 
 message LaunchRocketRequest {
   Rocket rocket = 1;
-  Mission mission = 2;
+  SpaceMission mission = 2;
 }
 
 message LaunchRocketResponse {

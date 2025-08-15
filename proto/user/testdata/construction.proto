@@ -21,10 +21,10 @@ message Project {
   google.protobuf.Timestamp start_date = 4;
   google.protobuf.Timestamp end_date = 5;
   string status = 6;
-  repeated Task tasks = 7;
+  repeated ConstructionTask tasks = 7;
 }
 
-message Task {
+message ConstructionTask {
   string task_id = 1;
   string task_name = 2;
   string description = 3;
@@ -63,7 +63,7 @@ message AssignWorkerToTaskRequest {
 }
 
 message AssignWorkerToTaskResponse {
-  Task task = 1;
+  ConstructionTask task = 1;
   string error_message = 2;
 }
 

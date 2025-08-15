@@ -3,6 +3,7 @@ syntax = "proto3";
 package user.testdata;
 
 import "google/protobuf/timestamp.proto";
+import "user/testdata/healthcare_system.proto";
 
 option go_package = "github.com/example/bazel-example/proto/user/testdata";
 option java_multiple_files = true;
@@ -22,14 +23,6 @@ message Pet {
   string owner_id = 6;
 }
 
-message Appointment {
-  string appointment_id = 1;
-  string pet_id = 2;
-  string vet_id = 3;
-  google.protobuf.Timestamp time = 4;
-  string reason = 5;
-}
-
 message PetRecord {
   string record_id = 1;
   string pet_id = 2;
@@ -43,15 +36,6 @@ message RegisterPetRequest {
 
 message RegisterPetResponse {
   Pet pet = 1;
-  string error_message = 2;
-}
-
-message ScheduleAppointmentRequest {
-  Appointment appointment = 1;
-}
-
-message ScheduleAppointmentResponse {
-  Appointment appointment = 1;
   string error_message = 2;
 }
 

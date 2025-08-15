@@ -10,7 +10,7 @@ option java_multiple_files = true;
 service TravelBookingService {
   rpc SearchFlights(SearchFlightsRequest) returns (SearchFlightsResponse);
   rpc BookFlight(BookFlightRequest) returns (BookFlightResponse);
-  rpc GetBookingStatus(GetBookingStatusRequest) returns (Booking);
+  rpc GetBookingStatus(GetBookingStatusRequest) returns (TravelBooking);
 }
 
 message Flight {
@@ -23,7 +23,7 @@ message Flight {
   double price = 7;
 }
 
-message Booking {
+message TravelBooking {
   string booking_id = 1;
   string flight_id = 2;
   string user_id = 3;
@@ -46,7 +46,7 @@ message BookFlightRequest {
 }
 
 message BookFlightResponse {
-  Booking booking = 1;
+  TravelBooking booking = 1;
   string error_message = 2;
 }
 
