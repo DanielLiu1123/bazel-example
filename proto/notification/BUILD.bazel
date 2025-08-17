@@ -5,7 +5,7 @@ load("@rules_go//proto:def.bzl", "go_proto_library", "go_grpc_library")
 
 proto_library(
     name = "proto",
-    srcs = glob(["**/*.proto"]),
+    srcs = glob(["*.proto"]),
     strip_import_prefix = "/proto",
     deps = [
         "//proto/common:proto",
@@ -24,7 +24,7 @@ java_proto_library(
 java_grpc_library(
     name = "grpc_java",
     srcs = [":proto"],
-    deps = ["//proto/common:proto_java", "//proto/user:proto_java"],
+    deps = [":proto_java", "//proto/common:proto_java", "//proto/user:proto_java"],
     visibility = ["//visibility:public"],
 )
 
@@ -39,7 +39,7 @@ go_proto_library(
 go_grpc_library(
     name = "grpc_go",
     protos = [":proto"],
-    deps = ["//proto/common:proto_go", "//proto/user:proto_go"],
+    deps = [":proto_go", "//proto/common:proto_go", "//proto/user:proto_go"],
     importpath = "github.com/example/bazel-example/proto/notification",
     visibility = ["//visibility:public"],
 )

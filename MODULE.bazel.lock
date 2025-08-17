@@ -83,9 +83,16 @@
     "https://bcr.bazel.build/modules/google_benchmark/1.8.4/MODULE.bazel": "c6d54a11dcf64ee63545f42561eda3fd94c1b5f5ebe1357011de63ae33739d5e",
     "https://bcr.bazel.build/modules/google_benchmark/1.8.5/MODULE.bazel": "9ba9b31b984022828a950e3300410977eda2e35df35584c6b0b2d0c2e52766b7",
     "https://bcr.bazel.build/modules/google_benchmark/1.8.5/source.json": "2c9c685f9b496f125b9e3a9c696c549d1ed2f33b75830a2fb6ac94fab23c0398",
+    "https://bcr.bazel.build/modules/googleapis-go/1.0.0/MODULE.bazel": "0a207a4c49da28c5cc1f7b3aeb23c2f7828c85c14aa8d9db0e30357a8d2250ed",
+    "https://bcr.bazel.build/modules/googleapis-go/1.0.0/source.json": "ef189be4e7853e1ebc6123fe20b71822bf9896bd1f8eed8f68505c4585f72a48",
+    "https://bcr.bazel.build/modules/googleapis-java/1.0.0/MODULE.bazel": "d633989337d069b5a95e6101777319681d7a4af4677e36801f11839d6512095c",
+    "https://bcr.bazel.build/modules/googleapis-java/1.0.0/source.json": "ee59e2de37e4b531172870ac0296afa38f1ea004105ee21b2793c31a9d0ddccd",
+    "https://bcr.bazel.build/modules/googleapis-rules-registry/1.0.0/MODULE.bazel": "97c6a4d413b373d4cc97065da3de1b2166e22cbbb5f4cc9f05760bfa83619e24",
+    "https://bcr.bazel.build/modules/googleapis-rules-registry/1.0.0/source.json": "cf611c836a60e98e2e2ab2de8004f119e9f06878dcf4ea2d95a437b1b7a89fe9",
     "https://bcr.bazel.build/modules/googleapis/0.0.0-20240326-1c8d509c5/MODULE.bazel": "a4b7e46393c1cdcc5a00e6f85524467c48c565256b22b5fae20f84ab4a999a68",
     "https://bcr.bazel.build/modules/googleapis/0.0.0-20240819-fe8ba054a/MODULE.bazel": "117b7c7be7327ed5d6c482274533f2dbd78631313f607094d4625c28203cacdf",
-    "https://bcr.bazel.build/modules/googleapis/0.0.0-20240819-fe8ba054a/source.json": "b31fc7eb283a83f71d2e5bfc3d1c562d2994198fa1278409fbe8caec3afc1d3e",
+    "https://bcr.bazel.build/modules/googleapis/0.0.0-20250730-f6801ce4/MODULE.bazel": "feac2583b0b13a5a8ba721442c5b9fccc1367578f53f5e5b1fb541934886477a",
+    "https://bcr.bazel.build/modules/googleapis/0.0.0-20250730-f6801ce4/source.json": "bd15093d251d2c993d2ded38ac273c346f8bf96cf2737615abda6bc5206d3c89",
     "https://bcr.bazel.build/modules/googletest/1.11.0/MODULE.bazel": "3a83f095183f66345ca86aa13c58b59f9f94a2f81999c093d4eeaa2d262d12f4",
     "https://bcr.bazel.build/modules/googletest/1.14.0.bcr.1/MODULE.bazel": "22c31a561553727960057361aa33bf20fb2e98584bc4fec007906e27053f80c6",
     "https://bcr.bazel.build/modules/googletest/1.14.0/MODULE.bazel": "cfbcbf3e6eac06ef9d85900f64424708cc08687d1b527f0ef65aa7517af8118f",
@@ -617,168 +624,12 @@
     },
     "@@googleapis+//:extensions.bzl%switched_rules": {
       "general": {
-        "bzlTransitiveDigest": "vG6fuTzXD8MMvHWZEQud0MMH7eoC4GXY0va7VrFFh04=",
-        "usagesDigest": "CAry9PE//aJqVo25arsA0H+N+tS8r5uv2OoDA+5BYEM=",
+        "bzlTransitiveDigest": "1ZTg77R3Ks/ksx8QMNIoTRJetbJPRlzGFlJa9hoUn+Y=",
+        "usagesDigest": "Fee7RQ11cH50LM4v9HmGU/1PASBjTTq05dl/6JR4goA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
-        "generatedRepoSpecs": {
-          "com_google_googleapis_imports": {
-            "repoRuleId": "@@googleapis+//:repository_rules.bzl%switched_rules",
-            "attributes": {
-              "rules": {
-                "proto_library_with_info": [
-                  "",
-                  ""
-                ],
-                "moved_proto_library": [
-                  "",
-                  ""
-                ],
-                "java_proto_library": [
-                  "",
-                  ""
-                ],
-                "java_grpc_library": [
-                  "",
-                  ""
-                ],
-                "java_gapic_library": [
-                  "",
-                  ""
-                ],
-                "java_gapic_test": [
-                  "",
-                  ""
-                ],
-                "java_gapic_assembly_gradle_pkg": [
-                  "",
-                  ""
-                ],
-                "py_proto_library": [
-                  "",
-                  ""
-                ],
-                "py_grpc_library": [
-                  "",
-                  ""
-                ],
-                "py_gapic_library": [
-                  "",
-                  ""
-                ],
-                "py_test": [
-                  "",
-                  ""
-                ],
-                "py_gapic_assembly_pkg": [
-                  "",
-                  ""
-                ],
-                "py_import": [
-                  "",
-                  ""
-                ],
-                "go_proto_library": [
-                  "",
-                  ""
-                ],
-                "go_grpc_library": [
-                  "",
-                  ""
-                ],
-                "go_library": [
-                  "",
-                  ""
-                ],
-                "go_test": [
-                  "",
-                  ""
-                ],
-                "go_gapic_library": [
-                  "",
-                  ""
-                ],
-                "go_gapic_assembly_pkg": [
-                  "",
-                  ""
-                ],
-                "cc_proto_library": [
-                  "",
-                  ""
-                ],
-                "cc_grpc_library": [
-                  "",
-                  ""
-                ],
-                "cc_gapic_library": [
-                  "",
-                  ""
-                ],
-                "php_proto_library": [
-                  "",
-                  "php_proto_library"
-                ],
-                "php_grpc_library": [
-                  "",
-                  "php_grpc_library"
-                ],
-                "php_gapic_library": [
-                  "",
-                  "php_gapic_library"
-                ],
-                "php_gapic_assembly_pkg": [
-                  "",
-                  "php_gapic_assembly_pkg"
-                ],
-                "nodejs_gapic_library": [
-                  "",
-                  "typescript_gapic_library"
-                ],
-                "nodejs_gapic_assembly_pkg": [
-                  "",
-                  "typescript_gapic_assembly_pkg"
-                ],
-                "ruby_proto_library": [
-                  "",
-                  ""
-                ],
-                "ruby_grpc_library": [
-                  "",
-                  ""
-                ],
-                "ruby_ads_gapic_library": [
-                  "",
-                  ""
-                ],
-                "ruby_cloud_gapic_library": [
-                  "",
-                  ""
-                ],
-                "ruby_gapic_assembly_pkg": [
-                  "",
-                  ""
-                ],
-                "csharp_proto_library": [
-                  "",
-                  ""
-                ],
-                "csharp_grpc_library": [
-                  "",
-                  ""
-                ],
-                "csharp_gapic_library": [
-                  "",
-                  ""
-                ],
-                "csharp_gapic_assembly_pkg": [
-                  "",
-                  ""
-                ]
-              }
-            }
-          }
-        },
+        "generatedRepoSpecs": {},
         "recordedRepoMappingEntries": []
       }
     },

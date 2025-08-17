@@ -8,10 +8,8 @@ proto_library(
     srcs = glob(["*.proto"]),
     strip_import_prefix = "/proto",
     deps = [
-        "//proto/common:proto",
         "@protobuf//:timestamp_proto",
         "@protobuf//:duration_proto",
-        "@googleapis//google/type:date_proto",
     ],
     visibility = ["//visibility:public"],
 )
@@ -32,15 +30,14 @@ java_grpc_library(
 go_proto_library(
     name = "proto_go",
     protos = [":proto"],
-    importpath = "github.com/example/bazel-example/proto/user",
-    deps = ["@googleapis//google/type:date_go_proto"],
+    importpath = "github.com/example/bazel-example/proto/user/testdata",
     visibility = ["//visibility:public"],
 )
 
 go_grpc_library(
     name = "grpc_go",
     protos = [":proto"],
-    deps = [":proto_go", "@googleapis//google/type:date_go_proto"],
-    importpath = "github.com/example/bazel-example/proto/user",
+    deps = [":proto_go"],
+    importpath = "github.com/example/bazel-example/proto/user/testdata",
     visibility = ["//visibility:public"],
 )

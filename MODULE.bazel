@@ -16,6 +16,12 @@ bazel_dep(name = "rules_jvm_external", version = "6.8")
 bazel_dep(name = "contrib_rules_jvm", version = "0.29.0")
 # https://registry.bazel.build/modules/protobuf
 bazel_dep(name = "protobuf", version = "32.0")
+# https://registry.bazel.build/modules/googleapis
+bazel_dep(name = "googleapis", version = "0.0.0-20250730-f6801ce4")
+# https://registry.bazel.build/modules/googleapis-java
+bazel_dep(name = "googleapis-java", version = "1.0.0")
+# https://registry.bazel.build/modules/googleapis-go
+bazel_dep(name = "googleapis-go", version = "1.0.0")
 # https://github.com/salesforce/rules_spring
 bazel_dep(name = "rules_spring", version = "2.6.3")
 # https://registry.bazel.build/modules/grpc-java
