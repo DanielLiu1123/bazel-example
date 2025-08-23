@@ -41,7 +41,6 @@ func main() {
 	s := grpc.NewServer()
 
 	// Register notification service
-	notificationService := &NotificationService{}
 	// notification.RegisterNotificationServiceServer(s, notificationService)  // TODO: Add when proto is generated
 
 	// Enable reflection for debugging

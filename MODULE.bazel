@@ -6,60 +6,66 @@ module(
 # Bazel rules for different languages
 # https://registry.bazel.build/modules/rules_go
 bazel_dep(name = "rules_go", version = "0.56.1")
+
 # https://registry.bazel.build/modules/gazelle
 bazel_dep(name = "gazelle", version = "0.45.0")
+
 # https://registry.bazel.build/modules/rules_java
 bazel_dep(name = "rules_java", version = "8.15.1")
+
 # https://registry.bazel.build/modules/rules_jvm_external
 bazel_dep(name = "rules_jvm_external", version = "6.8")
+
 # https://registry.bazel.build/modules/contrib_rules_jvm
 bazel_dep(name = "contrib_rules_jvm", version = "0.29.0")
+
 # https://registry.bazel.build/modules/protobuf
 bazel_dep(name = "protobuf", version = "32.0")
+
 # https://registry.bazel.build/modules/googleapis
 bazel_dep(name = "googleapis", version = "0.0.0-20250730-f6801ce4")
+
 # https://registry.bazel.build/modules/googleapis-java
 bazel_dep(name = "googleapis-java", version = "1.0.0")
+
 # https://registry.bazel.build/modules/googleapis-go
 bazel_dep(name = "googleapis-go", version = "1.0.0")
+
 # https://github.com/salesforce/rules_spring
 bazel_dep(name = "rules_spring", version = "2.6.3")
+
 # https://registry.bazel.build/modules/grpc-java
 bazel_dep(name = "grpc-java", version = "1.71.0")
 
 # Go dependencies
+go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
+go_sdk.download(version = "1.25.0")
+
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
+use_repo(go_deps, "org_golang_google_protobuf", "org_golang_google_grpc")
 
 # Java dependencies
 mapstruct_version = "1.6.3"
+
 spring_boot_version = "3.5.4"
+
 grpc_starter_version = "3.5.4"
+
 grpc_version = "1.74.0"
+
 protobuf_version = "4.31.1"
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
-    repositories = [
-            "https://repo1.maven.org/maven2",
-        ],
-    boms = [
-            "org.springframework.boot:spring-boot-dependencies:%s" % spring_boot_version,
-            "io.github.danielliu1123:grpc-starter-dependencies:%s" % grpc_starter_version,
-            "io.grpc:grpc-bom:%s" % grpc_version,
-            "com.google.protobuf:protobuf-bom:%s" % protobuf_version,
-        ],
     artifacts = [
         "org.springframework.boot:spring-boot-jarmode-tools",
         "org.springframework.boot:spring-boot-loader-tools",
-
         "org.springframework.boot:spring-boot-starter-web",
         "org.springframework.boot:spring-boot-starter-test",
-
         "io.github.danielliu1123:grpc-boot-starter",
         "io.github.danielliu1123:grpc-client-boot-starter",
         "io.github.danielliu1123:grpc-server-boot-starter",
-
         "com.google.protobuf:protobuf-java",
         "com.google.protobuf:protobuf-java-util",
         "io.grpc:grpc-netty",
@@ -67,7 +73,6 @@ maven.install(
         "io.grpc:grpc-protobuf",
         "io.grpc:grpc-stub",
         "io.grpc:grpc-services",
-
         "org.junit.jupiter:junit-jupiter-api",
         "org.junit.platform:junit-platform-launcher",
         "org.junit.platform:junit-platform-reporting",
@@ -81,6 +86,15 @@ maven.install(
         "org.projectlombok:lombok-mapstruct-binding:0.2.0",
         # https://github.com/entur/mapstruct-spi-protobuf
         "no.entur.mapstruct.spi:protobuf-spi-impl:1.50.0",
+    ],
+    boms = [
+        "org.springframework.boot:spring-boot-dependencies:%s" % spring_boot_version,
+        "io.github.danielliu1123:grpc-starter-dependencies:%s" % grpc_starter_version,
+        "io.grpc:grpc-bom:%s" % grpc_version,
+        "com.google.protobuf:protobuf-bom:%s" % protobuf_version,
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
     ],
 )
 use_repo(maven, "maven")

@@ -1,43 +1,67 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
 load("@protobuf//bazel:java_proto_library.bzl", "java_proto_library")
-load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
+load("@rules_go//go:def.bzl", "go_library")
 load("@rules_go//proto:def.bzl", "go_proto_library", "go_grpc_library")
+load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
 
 proto_library(
     name = "proto",
     srcs = glob(["*.proto"]),
     strip_import_prefix = "/proto",
     deps = [
-        "@protobuf//:timestamp_proto",
-        "@protobuf//:duration_proto",
+        "//proto/common:proto",
     ],
     visibility = ["//visibility:public"],
 )
 
-java_proto_library(
+java_library(
     name = "proto_java",
-    deps = [":proto"],
+    exports = [":gen_proto_java", "//proto/common:proto_java"],
     visibility = ["//visibility:public"],
+)
+
+java_library(
+    name = "grpc_java",
+    exports = [":gen_grpc_java", ":proto_java"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "proto_go",
+    deps = [":gen_proto_go", "//proto/common:proto_go"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "grpc_go",
+    deps = [":gen_grpc_go", ":proto_go"],
+    visibility = ["//visibility:public"],
+)
+
+java_proto_library(
+    name = "gen_proto_java",
+    deps = [":proto"],
+#     visibility = ["//visibility:public"],
 )
 
 java_grpc_library(
-    name = "grpc_java",
+    name = "gen_grpc_java",
     srcs = [":proto"],
-    deps = [":proto_java"],
-    visibility = ["//visibility:public"],
+    deps = [":gen_proto_java"],
+#     visibility = ["//visibility:public"],
 )
 
 go_proto_library(
-    name = "proto_go",
+    name = "gen_proto_go",
     protos = [":proto"],
     importpath = "github.com/example/bazel-example/proto/user/testdata",
-    visibility = ["//visibility:public"],
+#     visibility = ["//visibility:public"],
 )
 
 go_grpc_library(
-    name = "grpc_go",
+    name = "gen_grpc_go",
     protos = [":proto"],
-    deps = [":proto_go"],
+    deps = [":gen_proto_go"],
     importpath = "github.com/example/bazel-example/proto/user/testdata",
-    visibility = ["//visibility:public"],
+#     visibility = ["//visibility:public"],
 )
