@@ -6,7 +6,7 @@ load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
 
 proto_library(
     name = "proto",
-    srcs = glob(["*.proto"]),
+    srcs = ["notification.proto"],
     strip_import_prefix = "/proto",
     deps = [
         "//proto/common:proto",
@@ -16,22 +16,35 @@ proto_library(
     visibility = ["//visibility:public"],
 )
 
+proto_library(
+    name = "service_proto",
+    srcs = ["notification_service.proto"],
+    strip_import_prefix = "/proto",
+    deps = [
+        ":proto",
+        "//proto/common:proto",
+        "//proto/user:proto",
+        "@protobuf//:timestamp_proto",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 java_proto_library(
     name = "proto_java",
-    deps = [":proto"],
+    deps = [":proto", ":service_proto"],
     visibility = ["//visibility:public"],
 )
 
 java_grpc_library(
     name = "grpc_java",
-    srcs = [":proto"],
+    srcs = [":service_proto"],
     deps = [":proto_java"],
     visibility = ["//visibility:public"],
 )
 
 go_proto_library(
     name = "proto_go",
-    protos = [":proto"],
+    protos = [":proto", ":service_proto"],
     deps = [
         "//proto/common:proto_go",
         "//proto/user:proto_go",
@@ -43,7 +56,7 @@ go_proto_library(
 
 go_grpc_library(
     name = "grpc_go",
-    protos = [":proto"],
+    protos = [":service_proto"],
     deps = [
         ":proto_go",
         "//proto/common:proto_go",
