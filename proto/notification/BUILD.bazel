@@ -50,7 +50,6 @@ go_grpc_library(
         "//proto/user:proto_go",
         "@org_golang_google_protobuf//types/known/timestamppb",
     ],
-
-    importpath = "github.com/example/bazel-example/proto/notificationgrpc",
+    importpath = "github.com/example/bazel-example/proto/notificationpb",
     visibility = ["//visibility:public"],
 )

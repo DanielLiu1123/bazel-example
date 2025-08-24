@@ -6,7 +6,7 @@ import "user/testdata/marketplace.proto";
 import "user/testdata/cryptocurrency.proto";
 import "user/testdata/financial_services.proto";
 
-option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option go_package = "github.com/example/bazel-example/proto/user/testdatapb";
 option java_multiple_files = true;
 
 service RetailPosService {
