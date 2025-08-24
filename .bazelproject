@@ -1,0 +1,9 @@
+# IDE support: https://ij.bazel.build/docs/project-views.html#targets
+
+directories:
+  .
+
+targets:
+  //proto/...:all
+
+derive_targets_from_directories: true

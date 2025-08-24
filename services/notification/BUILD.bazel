@@ -1,22 +1,10 @@
-load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
-
-go_library(
-    name = "lib",
-    srcs = glob(["**/*.go"]),
-    importpath = "github.com/example/bazel-example/services/notification",
-    deps = [
-        "//proto/notification:grpc_go",
-    ],
-)
+load("@rules_go//go:def.bzl", "go_binary")
 
 go_binary(
     name = "app",
-    embed = [":lib"],
-    visibility = ["//visibility:public"],
+    srcs = ["main.go"],
+    deps = [
+        "//services/notification/internal/grpc:lib",
+    ],
+    visibility = ["//visibility:private"],
 )
-
-# go_test(
-#     name = "test",
-# #     srcs = glob(["**/*.go"]),
-#     embed = [":lib"],
-# )

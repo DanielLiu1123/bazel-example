@@ -7,33 +7,21 @@ load("@rules_java//java:defs.bzl", "java_library")
 proto_library(
     name = "proto",
     srcs = glob(["**/*.proto"]),
-    deps = ["//:proto_googleapis"],
-    exports = ["//:proto_googleapis"],
+    deps = [],
     strip_import_prefix = "/proto",
     visibility = ["//visibility:public"],
 )
 
-java_library(
-    name = "proto_java",
-    exports = [":gen_proto_java", "//:proto_googleapis_java"],
-    visibility = ["//visibility:public"],
-)
-
-go_library(
-    name = "proto_go",
-    deps = [":gen_proto_go", "//:proto_googleapis_go"],
-    visibility = ["//visibility:public"],
-)
-
 java_proto_library(
-    name = "gen_proto_java",
+    name = "proto_java",
     deps = [":proto"],
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
 )
 
 go_proto_library(
-    name = "gen_proto_go",
-    importpath = "github.com/example/bazel-example/proto/common",
+    name = "proto_go",
+    importpath = "github.com/example/bazel-example/proto/commonpb",
     protos = [":proto"],
+    deps = [],
     visibility = ["//visibility:public"],
 )

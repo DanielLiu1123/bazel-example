@@ -5,7 +5,7 @@ module(
 
 # Bazel rules for different languages
 # https://registry.bazel.build/modules/rules_go
-bazel_dep(name = "rules_go", version = "0.56.1")
+bazel_dep(name = "rules_go", version = "0.57.0")
 
 # https://registry.bazel.build/modules/gazelle
 bazel_dep(name = "gazelle", version = "0.45.0")

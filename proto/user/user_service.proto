@@ -12,6 +12,12 @@ option go_package = "github.com/example/bazel-example/proto/user;userpb";
 service UserService {
   // Get user by ID
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  // Batch get users
+  rpc BatchGetUser(BatchGetUserRequest) returns (BatchGetUserResponse);
+  // Delete user by ID
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+  // Batch delete users
+  rpc BatchDeleteUser(BatchDeleteUserRequest) returns (BatchDeleteUserResponse);
 }
 
 // Request/Response messages
@@ -21,4 +27,28 @@ message GetUserRequest {
 
 message GetUserResponse {
   UserModel user = 1;
+}
+
+message BatchGetUserRequest {
+  repeated string ids = 1;
+}
+
+message BatchGetUserResponse {
+  repeated UserModel users = 1;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+}
+
+message BatchDeleteUserRequest {
+  repeated string ids = 1;
+}
+
+message BatchDeleteUserResponse {
+  int32 count = 1;
 }

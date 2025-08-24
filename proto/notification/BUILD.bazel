@@ -11,56 +11,46 @@ proto_library(
     deps = [
         "//proto/common:proto",
         "//proto/user:proto",
+        "@protobuf//:timestamp_proto",
     ],
     visibility = ["//visibility:public"],
 )
 
-java_library(
-    name = "proto_java",
-    exports = [":gen_proto_java", "//proto/common:proto_java"],
-    visibility = ["//visibility:public"],
-)
-
-java_library(
-    name = "grpc_java",
-    exports = [":gen_grpc_java", ":proto_java"],
-    visibility = ["//visibility:public"],
-)
-
-go_library(
-    name = "proto_go",
-    deps = [":gen_proto_go", "//proto/common:proto_go"],
-    visibility = ["//visibility:public"],
-)
-
-go_library(
-    name = "grpc_go",
-    deps = [":gen_grpc_go", ":proto_go"],
-    visibility = ["//visibility:public"],
-)
-
 java_proto_library(
-    name = "gen_proto_java",
+    name = "proto_java",
     deps = [":proto"],
+    visibility = ["//visibility:public"],
 )
 
 java_grpc_library(
-    name = "gen_grpc_java",
+    name = "grpc_java",
     srcs = [":proto"],
-    deps = [":gen_proto_java"],
+    deps = [":proto_java"],
+    visibility = ["//visibility:public"],
 )
 
 go_proto_library(
-    name = "gen_proto_go",
+    name = "proto_go",
     protos = [":proto"],
-    importpath = "github.com/example/bazel-example/proto/notification",
-#     deps = ["//proto/common:proto_go", "//proto/user:proto_go"],
+    deps = [
+        "//proto/common:proto_go",
+        "//proto/user:proto_go",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+    ],
+    importpath = "github.com/example/bazel-example/proto/notificationpb",
+    visibility = ["//visibility:public"],
 )
 
 go_grpc_library(
-    name = "gen_grpc_go",
+    name = "grpc_go",
     protos = [":proto"],
-    deps = [":gen_proto_go"],
-    importpath = "github.com/example/bazel-example/proto/notification",
-#     visibility = ["//visibility:public"],
+    deps = [
+        ":proto_go",
+        "//proto/common:proto_go",
+        "//proto/user:proto_go",
+        "@org_golang_google_protobuf//types/known/timestamppb",
+    ],
+
+    importpath = "github.com/example/bazel-example/proto/notificationgrpc",
+    visibility = ["//visibility:public"],
 )
