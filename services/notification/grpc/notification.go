@@ -1,11 +1,11 @@
 package grpc
 
 import (
-	notificationgrpc "github.com/example/bazel-example/proto/notificationgrpc"
+	"github.com/example/bazel-example/proto/notificationpb"
 )
 
 type NotificationService struct {
-	notificationgrpc.UnimplementedNotificationServiceServer
+	notificationpb.UnimplementedNotificationServiceServer
 }
 
 func NewNotificationService() *NotificationService {

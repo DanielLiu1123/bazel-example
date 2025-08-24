@@ -4,7 +4,7 @@ go_binary(
     name = "app",
     srcs = ["main.go"],
     deps = [
-        "//services/notification/internal/grpc:lib",
+        "//services/notification/grpc:lib",
     ],
     visibility = ["//visibility:private"],
 )

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/example/bazel-example/services/notification/internal/grpc"
+import "github.com/example/bazel-example/services/notification/grpc"
 
 func main() {
 	ns := grpc.NewNotificationService()
