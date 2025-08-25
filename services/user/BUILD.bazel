@@ -13,7 +13,6 @@ java_library(
         "//proto/common:proto_java",
         "//proto/user/testdata:proto_java",
         "//proto/user/testdata:grpc_java",
-        "//proto/user:proto_java",
         "//proto/user:grpc_java",
 
         "@maven//:org_springframework_boot_spring_boot_starter",

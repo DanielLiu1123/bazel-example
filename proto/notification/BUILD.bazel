@@ -6,7 +6,7 @@ load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
 
 proto_library(
     name = "proto",
-    srcs = ["notification.proto"],
+    srcs = glob(["*.proto"]),
     strip_import_prefix = "/proto",
     deps = [
         "//proto/common:proto",
@@ -16,51 +16,27 @@ proto_library(
     visibility = ["//visibility:public"],
 )
 
-proto_library(
-    name = "service_proto",
-    srcs = ["notification_service.proto"],
-    strip_import_prefix = "/proto",
-    deps = [
-        ":proto",
-        "//proto/common:proto",
-        "//proto/user:proto",
-        "@protobuf//:timestamp_proto",
-    ],
-    visibility = ["//visibility:public"],
-)
-
+# Java
 java_proto_library(
     name = "proto_java",
-    deps = [":proto", ":service_proto"],
+    deps = [":proto"],
     visibility = ["//visibility:public"],
 )
 
 java_grpc_library(
     name = "grpc_java",
-    srcs = [":service_proto"],
+    srcs = [":proto"],
     deps = [":proto_java"],
     visibility = ["//visibility:public"],
 )
 
-go_proto_library(
-    name = "proto_go",
-    protos = [":proto", ":service_proto"],
-    deps = [
-        "//proto/common:proto_go",
-        "//proto/user:proto_go",
-        "@org_golang_google_protobuf//types/known/timestamppb",
-    ],
-    importpath = "github.com/example/bazel-example/proto/notificationpb",
-    visibility = ["//visibility:public"],
-)
-
+# Go
 go_grpc_library(
     name = "grpc_go",
-    protos = [":service_proto"],
+    protos = [":proto"],
     deps = [
-        ":proto_go",
         "//proto/common:proto_go",
-        "//proto/user:proto_go",
+        "//proto/user:grpc_go",
         "@org_golang_google_protobuf//types/known/timestamppb",
     ],
     importpath = "github.com/example/bazel-example/proto/notificationpb",

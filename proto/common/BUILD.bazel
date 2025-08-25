@@ -6,18 +6,20 @@ load("@rules_java//java:defs.bzl", "java_library")
 
 proto_library(
     name = "proto",
-    srcs = glob(["**/*.proto"]),
+    srcs = glob(["*.proto"]),
     deps = [],
     strip_import_prefix = "/proto",
     visibility = ["//visibility:public"],
 )
 
+# Java
 java_proto_library(
     name = "proto_java",
     deps = [":proto"],
     visibility = ["//visibility:public"],
 )
 
+# Go
 go_proto_library(
     name = "proto_go",
     importpath = "github.com/example/bazel-example/proto/commonpb",

@@ -5,6 +5,8 @@ go_binary(
     srcs = ["main.go"],
     deps = [
         "//services/notification/grpc:lib",
+        "//proto/notification:grpc_go",
+        "@org_golang_google_grpc//:go_default_library",
     ],
     visibility = ["//visibility:private"],
 )

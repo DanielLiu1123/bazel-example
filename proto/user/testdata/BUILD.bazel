@@ -17,6 +17,7 @@ proto_library(
     visibility = ["//visibility:public"],
 )
 
+# Java
 java_proto_library(
     name = "proto_java",
     deps = [":proto"],
@@ -30,24 +31,11 @@ java_grpc_library(
     visibility = ["//visibility:public"],
 )
 
-go_proto_library(
-    name = "proto_go",
-    protos = [":proto"],
-    deps = [
-        "//proto/common:proto_go",
-        "@org_golang_google_protobuf//types/known/timestamppb",
-        "@org_golang_google_protobuf//types/known/durationpb",
-        "@googleapis//google/type:date_go_proto",
-    ],
-    importpath = "github.com/example/bazel-example/proto/user/testdatapb",
-    visibility = ["//visibility:public"],
-)
-
+# Go
 go_grpc_library(
     name = "grpc_go",
     protos = [":proto"],
     deps = [
-        ":proto_go",
         "//proto/common:proto_go",
         "@org_golang_google_protobuf//types/known/timestamppb",
         "@org_golang_google_protobuf//types/known/durationpb",

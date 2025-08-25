@@ -6,8 +6,7 @@ go_library(
     importpath = "github.com/example/bazel-example/services/notification/grpc",
     deps = [
         "//proto/common:proto_go",
-        "//proto/user:proto_go",
-        "//proto/notification:proto_go",
+        "//proto/user:grpc_go",
         "//proto/notification:grpc_go",
 
         "@org_golang_google_grpc//:go_default_library",
