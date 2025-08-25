@@ -1,7 +1,8 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
 load("@protobuf//bazel:java_proto_library.bzl", "java_proto_library")
-load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
+load("@rules_go//go:def.bzl", "go_library")
 load("@rules_go//proto:def.bzl", "go_proto_library", "go_grpc_library")
+load("@grpc-java//:java_grpc_library.bzl", "java_grpc_library")
 
 proto_library(
     name = "proto",
@@ -10,12 +11,12 @@ proto_library(
     deps = [
         "//proto/common:proto",
         "@protobuf//:timestamp_proto",
-        "@protobuf//:duration_proto",
         "@googleapis//google/type:date_proto",
     ],
     visibility = ["//visibility:public"],
 )
 
+# Java
 java_proto_library(
     name = "proto_java",
     deps = [":proto"],
@@ -29,18 +30,14 @@ java_grpc_library(
     visibility = ["//visibility:public"],
 )
 
-go_proto_library(
-    name = "proto_go",
-    protos = [":proto"],
-    importpath = "github.com/example/bazel-example/proto/user",
-    deps = ["@googleapis//google/type:date_go_proto"],
-    visibility = ["//visibility:public"],
-)
-
+# Go
 go_grpc_library(
     name = "grpc_go",
     protos = [":proto"],
-    deps = [":proto_go", "@googleapis//google/type:date_go_proto"],
-    importpath = "github.com/example/bazel-example/proto/user",
+    deps = [
+        "@org_golang_google_protobuf//types/known/timestamppb",
+        "@googleapis//google/type:date_go_proto",
+    ],
+    importpath = "github.com/example/bazel-example/proto/userpb",
     visibility = ["//visibility:public"],
 )

@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 
 option java_package = "com.example.notification";
 option java_multiple_files = true;
-option go_package = "github.com/example/bazel-example/proto/notification;notificationpb";
+option go_package = "github.com/example/bazel-example/proto/notificationpb";
 
 // Supported delivery channels
 enum Channel {

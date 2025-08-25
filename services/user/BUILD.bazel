@@ -10,6 +10,9 @@ java_library(
     resource_strip_prefix = "services/user/src/main/resources",
     plugins = ["//:lombok_ap", "//:mapstruct_ap", "//:mapstruct_spi_protobuf_ap"],
     deps = [
+        "//proto/common:proto_java",
+        "//proto/user/testdata:proto_java",
+        "//proto/user/testdata:grpc_java",
         "//proto/user:grpc_java",
 
         "@maven//:org_springframework_boot_spring_boot_starter",

@@ -6,16 +6,14 @@ import "notification/notification.proto";
 
 option java_package = "com.example.notification";
 option java_multiple_files = true;
-option go_package = "github.com/example/bazel-example/proto/notification;notificationpb";
+option go_package = "github.com/example/bazel-example/proto/notificationpb";
 
-// A minimal demo service exposing a single RPC.
 service NotificationService {
-  // Simple create-and-return for demo use.
   rpc CreateNotification(CreateNotificationRequest) returns (CreateNotificationResponse);
 }
 
 message CreateNotificationRequest {
-  Notification notification = 1; // id ignored on create
+  Notification notification = 1;
 }
 
 message CreateNotificationResponse {

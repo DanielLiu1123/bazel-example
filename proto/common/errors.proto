@@ -4,7 +4,7 @@ package common;
 
 option java_package = "com.example.common";
 option java_multiple_files = true;
-option go_package = "github.com/example/bazel-example/proto/common;commonpb";
+option go_package = "github.com/example/bazel-example/proto/commonpb";
 
 // Error codes
 enum ErrorCode {

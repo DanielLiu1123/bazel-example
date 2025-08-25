@@ -1,23 +1,29 @@
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
 load("@protobuf//bazel:java_proto_library.bzl", "java_proto_library")
 load("@rules_go//proto:def.bzl", "go_proto_library")
+load("@rules_go//go:def.bzl", "go_library")
+load("@rules_java//java:defs.bzl", "java_library")
 
 proto_library(
     name = "proto",
-    srcs = glob(["**/*.proto"]),
+    srcs = glob(["*.proto"]),
+    deps = [],
     strip_import_prefix = "/proto",
     visibility = ["//visibility:public"],
 )
 
+# Java
 java_proto_library(
     name = "proto_java",
     deps = [":proto"],
     visibility = ["//visibility:public"],
 )
 
+# Go
 go_proto_library(
     name = "proto_go",
-    importpath = "github.com/example/bazel-example/proto/common",
+    importpath = "github.com/example/bazel-example/proto/commonpb",
     protos = [":proto"],
+    deps = [],
     visibility = ["//visibility:public"],
 )

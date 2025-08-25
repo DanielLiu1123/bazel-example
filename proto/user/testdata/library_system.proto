@@ -4,7 +4,7 @@ package user.testdata;
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/example/bazel-example/proto/user/testdata";
+option go_package = "github.com/example/bazel-example/proto/user/testdatapb";
 option java_multiple_files = true;
 
 service LibraryService {
